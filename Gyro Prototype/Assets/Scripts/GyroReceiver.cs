@@ -2,6 +2,7 @@
 // I use Euler angles, not Quaternions (I know, I know, they're inherently flawed).
 // My local AI helped me a great deal with the receiving part, it's quite involved. I do understand how it works, though
 // In the comments, I will treat the receiving data as mail, I honestly think it is the better name.
+// I later added multiple player support, it is a bit scuffed, but essentially I made everything into lists and I just use the index to determine what group of players the data is for.
 
 using System;
 using UnityEngine;
@@ -23,36 +24,46 @@ public class GyroReceiver : MonoBehaviour
         else Destroy(gameObject);
     }
 
-
     [Header("Settings")]
+    [SerializeField] private int players = 2;
     [SerializeField] private bool sendDebugMessages = false;
-    [SerializeField] private int receivePort = 12345;
+    [SerializeField] private List<int> receivePorts = new List<int>();
     [Header("Events")]
-    public UnityEvent onGyro1Change;
-    public UnityEvent onGyro2Change;
+    public List<UnityEvent> onGyro1Changes = new List<UnityEvent>();
+    public List<UnityEvent> onGyro2Changes = new List<UnityEvent>();
     [Header("Output")]
-    public Vector3 gyro1Value;
-    public Vector3 gyro2Value;
+    public List<Vector3> gyro1Values = new List<Vector3>();
+    public List<Vector3> gyro2Values = new List<Vector3>();
 
-    private UdpClient _udpClient;
+    private readonly List<UdpClient> _udpClients = new List<UdpClient>();
     private IPEndPoint _remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
     private readonly HashSet<string> _knownPhones = new HashSet<string>();
-    private float _lastPacketTime = 0f;
 
     private void Start()
     {
-        _udpClient = new UdpClient(receivePort);
-        Log($"UDP can send mail to {receivePort}, the receiver is checking their mail every frame (they are a little lonely, don't mind them)");
+        // Setup UDP clients
+        for (int i = 0; i < players; i++)
+        {
+            _udpClients.Add(new UdpClient(receivePorts[i]));
+            Log($"UDP can send mail to {receivePorts[i]}, the receiver is checking their mail every frame (they are a little lonely, don't mind them)");
+        }
+        
         GameManager.Instance.onRecalibrate.AddListener(Recalibrate);
     }
 
+
     private void Update()
     {
+        for (int i = 0; i < players; i++) GetGyroValues(i);
+    }
+
+    private void GetGyroValues(int group)
+    {
         // Loop through all the mail
-        while (_udpClient != null && _udpClient.Available > 0) 
+        while (_udpClients[group] != null && _udpClients[group].Available > 0) 
         {
             // Gather a message in a strange foreign language called bytes
-            byte[] data = _udpClient.Receive(ref _remoteEndPoint);
+            byte[] data = _udpClients[group].Receive(ref _remoteEndPoint);
             string message = Encoding.UTF8.GetString(data); // Translate the bytes to readable text
             Log($"*MAIL ALERT* We got mail, it is from {_remoteEndPoint.Address}:{_remoteEndPoint.Port}, and it says: '{message}'");
 
@@ -76,11 +87,11 @@ public class GyroReceiver : MonoBehaviour
                     switch (phoneID)
                     {
                         case "1":
-                            gyro1Value += rotation;
-                            onGyro1Change.Invoke(); break;
+                            gyro1Values[group] += rotation;
+                            onGyro1Changes[group].Invoke(); break;
                         case "2":
-                            gyro2Value += rotation;
-                            onGyro2Change.Invoke(); break;
+                            gyro2Values[group] += rotation;
+                            onGyro2Changes[group].Invoke(); break;
                     }
                 }
                 else
@@ -93,7 +104,7 @@ public class GyroReceiver : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        _udpClient?.Close();
+       for (int i = 0; i < _udpClients.Count; i++) _udpClients[i]?.Close();
     }
 
     private void Log(String text)
@@ -103,7 +114,7 @@ public class GyroReceiver : MonoBehaviour
 
     private void Recalibrate()
     {
-        gyro1Value = Vector3.zero;
-        gyro2Value = Vector3.zero;
+        for (int i = 0; i < gyro1Values.Count; i++) gyro1Values[i] = Vector3.zero;
+        for (int i = 0; i < gyro2Values.Count; i++) gyro2Values[i] = Vector3.zero;
     }
 }

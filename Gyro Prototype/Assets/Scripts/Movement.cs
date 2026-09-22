@@ -22,6 +22,7 @@ public class Movement : MonoBehaviour
     [Header("Phone Functions")]
     [SerializeField] private MoveMode phone1Mode;
     [SerializeField] private MoveMode phone2Mode;
+    [SerializeField] private int group = 1;
 
     private float _velocity = 0f;
     private float _direction = 0f;
@@ -35,8 +36,8 @@ public class Movement : MonoBehaviour
     private void Update()
     {
         GyroReceiver gr = GyroReceiver.Instance;
-        VikingMove(phone1Mode == MoveMode.viking ? gr.gyro1Value  : gr.gyro2Value);
-        GoatMove(phone1Mode == MoveMode.goat ? gr.gyro1Value  : gr.gyro2Value);
+        VikingMove(phone1Mode == MoveMode.viking ? gr.gyro1Values[group]  : gr.gyro2Values[group]);
+        GoatMove(phone1Mode == MoveMode.goat ? gr.gyro1Values[group]  : gr.gyro2Values[group]);
         
         _velocity -= _velocity * velocityDrag * Time.deltaTime;
         
@@ -44,6 +45,8 @@ public class Movement : MonoBehaviour
         float dirInRadians = Mathf.Deg2Rad * _direction;
         Vector3 directionVector = new Vector3(Mathf.Cos(dirInRadians), Mathf.Sin(dirInRadians), 0f);
         transform.position +=  directionVector * _velocity;
+        
+        if (Keyboard.current.spaceKey.wasPressedThisFrame) MoveForward(vikingForce);
     }
 
     private void VikingMove(Vector3 dir)
