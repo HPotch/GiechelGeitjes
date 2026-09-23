@@ -1,0 +1,5 @@
+/home/hpotch/Documents/School/Jaar 2/Immerse Yourself/GiechelGeitjes/Gyro Prototype/.utmp/RelWithDebInfo/1n4xr4d4/arm64-v8a/CMakeFiles/edit_cache.dir
+/home/hpotch/Documents/School/Jaar 2/Immerse Yourself/GiechelGeitjes/Gyro Prototype/.utmp/RelWithDebInfo/1n4xr4d4/arm64-v8a/CMakeFiles/rebuild_cache.dir
+/home/hpotch/Documents/School/Jaar 2/Immerse Yourself/GiechelGeitjes/Gyro Prototype/.utmp/RelWithDebInfo/1n4xr4d4/arm64-v8a/GameActivity/CMakeFiles/game.dir
+/home/hpotch/Documents/School/Jaar 2/Immerse Yourself/GiechelGeitjes/Gyro Prototype/.utmp/RelWithDebInfo/1n4xr4d4/arm64-v8a/GameActivity/CMakeFiles/edit_cache.dir
+/home/hpotch/Documents/School/Jaar 2/Immerse Yourself/GiechelGeitjes/Gyro Prototype/.utmp/RelWithDebInfo/1n4xr4d4/arm64-v8a/GameActivity/CMakeFiles/rebuild_cache.dir

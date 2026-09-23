@@ -25,7 +25,6 @@ public class GyroReceiver : MonoBehaviour
     }
 
     [Header("Settings")]
-    [SerializeField] private int players = 2;
     [SerializeField] private bool sendDebugMessages = false;
     [SerializeField] private List<int> receivePorts = new List<int>();
     [Header("Events")]
@@ -36,16 +35,23 @@ public class GyroReceiver : MonoBehaviour
     public List<Vector3> gyro2Values = new List<Vector3>();
 
     private readonly List<UdpClient> _udpClients = new List<UdpClient>();
-    private IPEndPoint _remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
+    private List<IPEndPoint> _remoteEndPoints = new List<IPEndPoint>();
     private readonly HashSet<string> _knownPhones = new HashSet<string>();
 
     private void Start()
     {
-        // Setup UDP clients
-        for (int i = 0; i < players; i++)
+        // Setup Lists
+        for (int i = 0; i < receivePorts.Count; i++)
         {
             _udpClients.Add(new UdpClient(receivePorts[i]));
             Log($"UDP can send mail to {receivePorts[i]}, the receiver is checking their mail every frame (they are a little lonely, don't mind them)");
+            
+            _remoteEndPoints.Add(new IPEndPoint(IPAddress.Any, 0));
+            
+            onGyro1Changes.Add(new UnityEvent());
+            onGyro2Changes.Add(new UnityEvent());
+            gyro1Values.Add(Vector3.zero);
+            gyro2Values.Add(Vector3.zero);
         }
         
         GameManager.Instance.onRecalibrate.AddListener(Recalibrate);
@@ -54,7 +60,7 @@ public class GyroReceiver : MonoBehaviour
 
     private void Update()
     {
-        for (int i = 0; i < players; i++) GetGyroValues(i);
+        for (int i = 0; i < receivePorts.Count; i++) GetGyroValues(i);
     }
 
     private void GetGyroValues(int group)
@@ -63,9 +69,10 @@ public class GyroReceiver : MonoBehaviour
         while (_udpClients[group] != null && _udpClients[group].Available > 0) 
         {
             // Gather a message in a strange foreign language called bytes
-            byte[] data = _udpClients[group].Receive(ref _remoteEndPoint);
+            IPEndPoint remoteEndPoint = _remoteEndPoints[group];
+            byte[] data = _udpClients[group].Receive(ref remoteEndPoint);
             string message = Encoding.UTF8.GetString(data); // Translate the bytes to readable text
-            Log($"*MAIL ALERT* We got mail, it is from {_remoteEndPoint.Address}:{_remoteEndPoint.Port}, and it says: '{message}'");
+            Log($"*MAIL ALERT* We got mail, it is from {remoteEndPoint.Address}:{remoteEndPoint.Port}, and it says: '{message}'");
 
             // Split the message into the correct parts
             string[] parts = message.Split(',');
@@ -74,7 +81,7 @@ public class GyroReceiver : MonoBehaviour
                 // Detect new devices
                 string phoneID = parts[0];
                 if (_knownPhones.Add(phoneID))
-                    Log($"<color=green>*DEVICE ALERT*</color> '{phoneID}' wants to send us some mail, how thoughtful! They're on IP: {_remoteEndPoint.Address}");
+                    Log($"<color=green>*DEVICE ALERT*</color> '{phoneID}' wants to send us some mail, how thoughtful! They're on IP: {remoteEndPoint.Address}");
 
                 // Some letters are written in a different culture where points are commas and commas are points, we gotta use InvariantCulture!
                 if (float.TryParse(parts[1], NumberStyles.Any, CultureInfo.InvariantCulture, out float x) &&
@@ -87,10 +94,16 @@ public class GyroReceiver : MonoBehaviour
                     switch (phoneID)
                     {
                         case "1":
-                            gyro1Values[group] += rotation;
+                            gyro1Values[0] += rotation;
                             onGyro1Changes[group].Invoke(); break;
                         case "2":
-                            gyro2Values[group] += rotation;
+                            gyro2Values[0] += rotation;
+                            onGyro2Changes[group].Invoke(); break;
+                        case "3":
+                            gyro1Values[1] += rotation;
+                            onGyro1Changes[group].Invoke(); break;
+                        case "4":
+                            gyro2Values[1] += rotation;
                             onGyro2Changes[group].Invoke(); break;
                     }
                 }

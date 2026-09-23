@@ -14,7 +14,7 @@ public class GyroSender : MonoBehaviour
     public string phoneID = "1";
     [SerializeField] private TextMeshProUGUI text;
     public string serverIP = "192.168.0.0";
-    public int port = 12345;
+    public int port;
     
     private UdpClient _udpClient;
     [NonSerialized] public float stopTextTime = 0f;
@@ -52,7 +52,7 @@ public class GyroSender : MonoBehaviour
         string status = gyro?.enabled == true ? "<color=green>Enabled</color>" : "<color=red>Disabled</color>";
         Vector3 rate = gyro?.angularVelocity.ReadValue() ?? Vector3.zero;
 
-        text.text = $"Gyro {status}\nRate: {rate}";
+        text.text = $"Gyro {status}\nRate: {rate}\nPort: {port}";
     }
     
     private void OnApplicationQuit()

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using AudioSettings = AudioManager.AudioSettings;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,10 +11,23 @@ public class GameManager : MonoBehaviour
     public UnityEvent onRecalibrate;
     public UnityEvent onReset;
     
+    [Header("Settings")]
+    [SerializeField] private AudioSettings  goatAmience;
+    
     private void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+    }
+    
+    void Start ()
+    {
+        Debug.Log("Displays connected:" + Display.displays.Length);
+        for (int i = 0; i < Display.displays.Length; i++)
+        {
+            Display.displays[i].Activate();
+        }
+        AudioManager.Instance.PlayAudioSettings(goatAmience);
     }
 
     private void Update()

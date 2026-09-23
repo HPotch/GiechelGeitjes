@@ -20,12 +20,13 @@ public class AdressSetter : MonoBehaviour
     private void Start()
     {
         // Playerprefs
-        if (PlayerPrefs.HasKey("IP")) gyroSender.serverIP = PlayerPrefs.GetString("IP");
-        else PlayerPrefs.SetString("IP", gyroSender.serverIP);
-        if (PlayerPrefs.HasKey("port")) gyroSender.port = PlayerPrefs.GetInt("port");
-        else PlayerPrefs.SetInt("port", gyroSender.port);
-        IPInput.text = gyroSender.serverIP;
-        portInput.text = gyroSender.port.ToString();
+        // if (PlayerPrefs.HasKey("IP")) gyroSender.serverIP = PlayerPrefs.GetString("IP");
+        // else PlayerPrefs.SetString("IP", gyroSender.serverIP);
+        // if (PlayerPrefs.HasKey("port")) gyroSender.port = PlayerPrefs.GetInt("port");
+        // else PlayerPrefs.SetInt("port", gyroSender.port);
+        // IPInput.text = gyroSender.serverIP;
+        // portInput.text = gyroSender.port.ToString();
+        PlayerPrefs.DeleteAll();
     }
 
     public void SetIP()
@@ -66,32 +67,32 @@ public class AdressSetter : MonoBehaviour
         PlayerPrefs.SetString("IP", gyroSender.serverIP);
     }
     
-    public void SetPort()
-    {
-        if (!int.TryParse(portInput.text.Trim(), out var port))
-        {
-            SetMessage("Port should be a number", Color.red);
-            return;
-        }
-        if (port < 1024 || port > 65535)
-        {
-            SetMessage("Port should be between 1024 and 65535", Color.red);
-            return;
-        }
-        SetMessage("Port is valid!", Color.green);
-        gyroSender.port = port;
-        PlayerPrefs.SetInt("Port", gyroSender.port);
-    }
+    // public void SetPort()
+    // {
+    //     if (!int.TryParse(portInput.text.Trim(), out var port))
+    //     {
+    //         SetMessage("Port should be a number", Color.red);
+    //         return;
+    //     }
+    //     if (port < 1024 || port > 65535)
+    //     {
+    //         SetMessage("Port should be between 1024 and 65535", Color.red);
+    //         return;
+    //     }
+    //     SetMessage("Port is valid!", Color.green);
+    //     gyroSender.port = port;
+    //     PlayerPrefs.SetInt("Port", gyroSender.port);
+    // }
 
     public void IPInfo()
     {
         SetMessage("You should input the IP of your PC. You can find it by opening the terminal and running:\nWindows: ipconfig (then look for IPv4)\nMac: ipconfig getifaddr en0 (or en1)\nLinux: hostname -I\nAn example is: 192.168.68.123", Color.white, 16f);
     }
 
-    public void PortInfo()
-    {
-        SetMessage("You should match the port number on this device and your PC, as long as they match, you're good!", Color.white, 10f);
-    }
+    // public void PortInfo()
+    // {
+    //     SetMessage("You should match the port number on this device and your PC, as long as they match, you're good!", Color.white, 10f);
+    // }
 
     public void SetPhone1()
     {
@@ -101,6 +102,16 @@ public class AdressSetter : MonoBehaviour
     public void SetPhone2()
     {
         gyroSender.phoneID = "2";
+    }
+    
+    public void SetPhone3()
+    {
+        gyroSender.phoneID = "3";
+    }
+
+    public void SetPhone4()
+    {
+        gyroSender.phoneID = "4";
     }
 
     private void SetMessage(String message, Color color, float waitTime = 0f)
