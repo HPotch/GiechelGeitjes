@@ -54,7 +54,7 @@ public class GyroReceiver : MonoBehaviour
             gyro2Values.Add(Vector3.zero);
         }
         
-        GameManager.Instance.onRecalibrate.AddListener(Recalibrate);
+        TestManager.Instance?.onRecalibrate.AddListener(Recalibrate);
     }
 
 
