@@ -11,4 +11,9 @@ public class GameManager : MonoBehaviour
     }
 
     public float SpeedScale = 1f;
+
+    public enum MotionSickMode { none, aLittle, aLot }
+
+    [Tooltip("'None' might introduce problems for people who don't regularly experience motion sickness too!")]
+    public MotionSickMode motionSickMode = MotionSickMode.none;
 }
