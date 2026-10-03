@@ -12,11 +12,12 @@ public class Bound : MonoBehaviour
     private void Awake()
     {
         _mat = GetComponent<SpriteRenderer>().material;
+        transform.parent.localPosition = new Vector3(negative ? GameManager.Instance.bounds * -1f : GameManager.Instance.bounds,00);
     }
 
     private void Update()
     {
-        float dist = player.bounds - (negative ? -player.transform.position.x : player.transform.position.x);
+        float dist = GameManager.Instance.bounds - (negative ? -player.transform.position.x : player.transform.position.x);
         float a = Mathf.Clamp01(distance - Mathf.Pow(dist, power));
         
         _mat.SetFloat("_Alpha", a);

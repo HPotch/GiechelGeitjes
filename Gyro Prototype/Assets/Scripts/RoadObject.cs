@@ -6,10 +6,10 @@ public class RoadObject : MonoBehaviour
 {
     public enum Type
     {
-        Obstacle, Item
+        HighObstacle, LowObstacle, Item
     }
 
-    [SerializeField] private Type type = Type.Obstacle;
+    [SerializeField] private Type type = Type.LowObstacle;
     [SerializeField] [Tooltip("Units per second")] private Vector3 moveDirection = new Vector3(1f, 0, 0);
 
     [SerializeField] private float destroyBeyond = 21f;
@@ -23,22 +23,23 @@ public class RoadObject : MonoBehaviour
             Destroy(gameObject);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
         switch (type)
         {
-            case Type.Obstacle:
-                CollideObstacle(other); break;
+            case Type.HighObstacle or  Type.LowObstacle:
+                CollideObstacle(collision.collider); break;
             case Type.Item:
-                CollideItem(other); break;
+                CollideItem(collision.collider); break;
         }
     }
 
     private void CollideObstacle(Collider other)
     {
         if (!other.gameObject.CompareTag("Player")) return;
-        SceneManager.LoadScene("GameOver");
-        Destroy(gameObject);
+        
+        if (type == Type.HighObstacle) CrashManager.Instance.Crash(CrashManager.CrashType.High);
+        else if (type == Type.LowObstacle) CrashManager.Instance.Crash(CrashManager.CrashType.Low);
     }
 
     private void CollideItem(Collider other)

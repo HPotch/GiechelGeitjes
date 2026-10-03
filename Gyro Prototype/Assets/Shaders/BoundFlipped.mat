@@ -119,7 +119,7 @@ Material:
     - _CastShadows: 0
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
-    - _Cull: 2
+    - _Cull: 0
     - _CurvatureAmount: 0.00001
     - _CurvePower: 8
     - _Cutoff: 0.5
@@ -148,6 +148,7 @@ Material:
     - _SrcBlend: 5
     - _SrcBlendAlpha: 1
     - _Surface: 1
+    - _UseNormal: 0
     - _WorkflowMode: 0
     - _XRMotionVectorsPass: 1
     - _ZTest: 4

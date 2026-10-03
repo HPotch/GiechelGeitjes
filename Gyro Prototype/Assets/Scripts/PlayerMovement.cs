@@ -4,15 +4,24 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [Tooltip("How far the player can move")] public float bounds = 5f;
     [SerializeField] [Tooltip("Units per second")] private float speed = 2f;
     [SerializeField] [Tooltip("This curve decides tilt speed, based on the GameManagers max speed")] private AnimationCurve tiltCurve;
     [SerializeField] [Tooltip("The player gets pushed back if they are this close to the bounds")] private float pushBackDistance = 1f;
-
+    [SerializeField] [Tooltip("The layermask used for detecting if the player can move")] private LayerMask layerMask;
+    
     public UnityEvent afterMove;
+
+    private float _disableTime = 0f;
+
+    public void SetDisableTime(float time)
+    {
+        _disableTime = time;
+    }
     
     private void Update()
     { 
+        _disableTime -= Time.deltaTime;
+        if (_disableTime > 0f) return;
         LeftRight();
         Forward();
     }
@@ -25,9 +34,9 @@ public class PlayerMovement : MonoBehaviour
         if (Keyboard.current.rightArrowKey.isPressed || Keyboard.current.dKey.isPressed)
             dir = 1;
 
-        float distToLeftBound = bounds - transform.position.x * -1f;
+        float distToLeftBound = GameManager.Instance.bounds - transform.position.x * -1f;
         dir += Mathf.Clamp01(pushBackDistance - distToLeftBound);
-        float distToRightBound = bounds - transform.position.x;
+        float distToRightBound = GameManager.Instance.bounds - transform.position.x;
         dir -= Mathf.Clamp01(pushBackDistance - distToRightBound);
 
         float tiltSpeed = tiltCurve.Evaluate(Mathf.Clamp01(GameManager.Instance.moveAmount / GameManager.Instance.maxSpeed));
@@ -40,7 +49,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void Forward()
     {
-        if (!Keyboard.current.spaceKey.wasPressedThisFrame) return;
+        if (!(Keyboard.current.spaceKey.wasPressedThisFrame || Mouse.current.leftButton.wasPressedThisFrame)) return;
+        if (CastRay()) return;
+        
         GameManager.Instance.Move(1f);
+    }
+
+    private bool CastRay()
+    {
+        return Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), 1f, layerMask);
     }
 }

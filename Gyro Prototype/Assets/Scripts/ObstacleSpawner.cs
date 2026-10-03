@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,18 +6,12 @@ using Random = UnityEngine.Random;
 public class ObstacleSpawner : MonoBehaviour
 {
     [Header("Settings")]
-    [SerializeField] private Vector2 spawnTime = new Vector2(2f, 5f);
+    [SerializeField] private Vector2 spawnDistance = new Vector2(0.3f, 4f);
     [Header("References")]
     [SerializeField] private List<GameObject> obstaclePrefabs = new List<GameObject>();
 
-    private BoxCollider2D _bounds;
 
     private bool _spawning = false;
-
-    private void Awake()
-    {
-        _bounds = GetComponent<BoxCollider2D>();
-    }
 
     private void Update()
     {
@@ -29,11 +22,11 @@ public class ObstacleSpawner : MonoBehaviour
 
     private IEnumerator SpawnRoutine()
     {
-        float timer = Random.Range(spawnTime.x, spawnTime.y);
+        float distance = Random.Range(spawnDistance.x, spawnDistance.y);
 
-        while (timer > 0f)
+        while (distance > 0f)
         {
-            timer -= Time.deltaTime;
+            distance -= GameManager.Instance.moveAmount * Time.deltaTime;
             yield return null;
         }
         
@@ -44,7 +37,7 @@ public class ObstacleSpawner : MonoBehaviour
     private void SpawnObstacle()
     {
         GameObject obstacle = Instantiate(obstaclePrefabs[Random.Range(0, obstaclePrefabs.Count)], transform);
-        float range = _bounds.size.x / 2f;
+        float range = GameManager.Instance.bounds;
         obstacle.transform.localPosition = new Vector3(0f, 0f, Random.Range(-range, range));
     }
 }

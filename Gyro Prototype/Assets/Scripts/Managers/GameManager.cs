@@ -1,7 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,6 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float speedScale = 1f;
     [SerializeField] private float moveDecay = 0.1f;
     public float maxSpeed = 10f;
+    public float bounds = 5f;
     public enum MotionSickMode { none, aLittle, aLot }
     [Tooltip("'None' might introduce problems for people who don't regularly experience motion sickness too!")]
     public MotionSickMode motionSickMode = MotionSickMode.none;
