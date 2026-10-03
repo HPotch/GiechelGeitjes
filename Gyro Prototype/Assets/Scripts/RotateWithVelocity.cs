@@ -11,6 +11,8 @@ public class RotateWithVelocity : MonoBehaviour
     [SerializeField] private Axis rotateAxis = Axis.z;
     [SerializeField] private float smoothness = 20f;
     [SerializeField] private float rotateAmount;
+    [SerializeField] private AnimationCurve amountCurve;
+    [SerializeField] private float curveRange = 30f;
 
     private float _previousPosition;
     private float _velocity = 0f;
@@ -32,7 +34,8 @@ public class RotateWithVelocity : MonoBehaviour
         _velocity = Mathf.Lerp(_velocity, targetRotation - _smoothedTargetRot, deltaTime * smoothness);
         _smoothedTargetRot += _velocity;
         
-        SetRot(_smoothedTargetRot * multiplier);
+        float finalRotation = amountCurve.Evaluate(Mathf.Abs(_smoothedTargetRot * multiplier) / curveRange) * curveRange * Mathf.Sign(_smoothedTargetRot);
+        SetRot(finalRotation);
         
         _previousPosition = GetPos();
         _previousTime = Time.time;

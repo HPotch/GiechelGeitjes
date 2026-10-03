@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,11 +13,11 @@ public class RoadObject : MonoBehaviour
     [SerializeField] [Tooltip("Units per second")] private Vector3 moveDirection = new Vector3(1f, 0, 0);
 
     [SerializeField] private float destroyBeyond = 21f;
-    
+
     private void Update()
     {
         // Scroll
-        transform.localPosition += moveDirection * (Time.deltaTime * GameManager.Instance.SpeedScale);
+        transform.localPosition += moveDirection * (Time.deltaTime * GameManager.Instance.moveAmount);
         
         if (transform.localPosition.x > destroyBeyond)
             Destroy(gameObject);

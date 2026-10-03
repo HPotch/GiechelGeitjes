@@ -5,6 +5,7 @@ public class AnimateTransform : MonoBehaviour
     public float multiplier = 1f;
     [SerializeField] private AnimationCurve curve;
     [SerializeField] private float speed;
+    [SerializeField] private bool influencedBySpeed = true;
     [SerializeField] private Vector3 rotateAmount;
     [SerializeField] private Vector3 rotateOffset;
     [SerializeField] private Vector3 positionAmount;
@@ -19,9 +20,11 @@ public class AnimateTransform : MonoBehaviour
         _timer += Time.deltaTime;
         if (_timer > speed) _timer %= speed;
 
-        transform.localEulerAngles = LerpWithOffset(Vector3.zero, rotateAmount * 2f - rotateAmount, rotateOffset) * multiplier;
-        transform.localPosition = LerpWithOffset(Vector3.zero, positionAmount * 2f - positionAmount, positionOffset) * multiplier;
-        transform.localScale = LerpWithOffset(Vector3.one, Vector3.one + ((scaleAmount * 2f - scaleAmount) * multiplier), scaleOffset) ;
+        float finalMultiplier = multiplier * (influencedBySpeed ? GameManager.Instance.moveAmount / GameManager.Instance.maxSpeed : 1f);
+        
+        transform.localEulerAngles = LerpWithOffset(Vector3.zero, rotateAmount * 2f - rotateAmount, rotateOffset) * finalMultiplier;
+        transform.localPosition = LerpWithOffset(Vector3.zero, positionAmount * 2f - positionAmount, positionOffset) * finalMultiplier;
+        transform.localScale = LerpWithOffset(Vector3.one, Vector3.one + ((scaleAmount * 2f - scaleAmount) * finalMultiplier), scaleOffset) ;
     }
 
     private Vector3 LerpWithOffset(Vector3 start, Vector3 end, Vector3 offset)
