@@ -8,7 +8,6 @@
 // High medium: The player launches back a bit, but stays on the goat. 2 second penalty
 // High hard: The player launches back, we see stars above his head. 5 second penalty
 
-using System;
 using UnityEngine;
 
 public class CrashManager : MonoBehaviour
@@ -32,20 +31,19 @@ public class CrashManager : MonoBehaviour
     [SerializeField] private float noCrashUntil = 0.1f;
     [SerializeField] private float smallCrashUntil = 0.4f;
     [SerializeField] private float mediumCrashUntil = 0.85f;
-    [SerializeField] private float forwardDecay = 2f;
     [SerializeField] private float recoverSmoothness = 10f;
     [Header("Small")]
     [SerializeField] private float smallDisableTime = 0.3f;
-    [SerializeField] private float smallForwardForce = 0.5f;
+    [SerializeField] private Animation smallForwardAnimation;
     [Header("LowMedium")]
     [SerializeField] private float lowMediumDisableTime = 1f;
-    [SerializeField] private float lowMediumForwardForce = 0.8f;
+    [SerializeField] private Animation lowMediumForwardAnimation;
     [Header("LowHigh")]
     [SerializeField] private float lowHighDisableTime = 2f;
-    [SerializeField] private float lowHighForwardForce = 1.5f;
+    [SerializeField] private Animation lowHighForwardAnimation;
 
     private float _forwardForce = 0f;
-
+    
     // Additional speed is used for crashes with incoming traffic, for example. The speed of the player and of the other moving object should be added together.
     public void Crash(CrashType type, float additionalSpeed = 0f)
     {
@@ -77,7 +75,6 @@ public class CrashManager : MonoBehaviour
 
     private void Update()
     {
-        _forwardForce -= forwardDecay * Time.deltaTime;
         if (_forwardForce > 0f)
             transform.localPosition += Vector3.forward * (_forwardForce * Time.deltaTime);
         else
@@ -87,21 +84,18 @@ public class CrashManager : MonoBehaviour
     private void Small()
     {
         player.SetDisableTime(smallDisableTime);
-        _forwardForce = smallForwardForce;
         print("Small");
     }
 
     private void LowMedium()
     {
         player.SetDisableTime(lowMediumDisableTime);
-        _forwardForce = lowMediumForwardForce;
         print("Low Medium");
     }
 
     private void LowHard()
     {
         player.SetDisableTime(lowHighDisableTime);
-        _forwardForce = lowHighForwardForce;
         print("Low Hard");
     }
 
