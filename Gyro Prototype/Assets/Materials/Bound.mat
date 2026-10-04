@@ -46,6 +46,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _Alpha: 1
+    - _CurvePower: 0
     - _Flip_X: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 0.16470589}
