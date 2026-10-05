@@ -4,8 +4,8 @@ using UnityEngine;
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class PlaneMesh : MonoBehaviour
 {
-    [SerializeField] [Range(1, 100)] private int subdivisions = 10;
-    [SerializeField] private float size = 10f;
+    [SerializeField] private Vector2Int subdivisions;
+    [SerializeField] private Vector2 size = new Vector2(1,10);
     [SerializeField] private float uvScale = 1f;
 
     private MeshFilter _meshFilter;
@@ -42,38 +42,38 @@ public class PlaneMesh : MonoBehaviour
         _mesh.Clear();
 
         // Setup variables
-        int verticesCount = (subdivisions + 1) * (subdivisions + 1);
+        int verticesCount = (subdivisions.x + 1) * (subdivisions.y + 1);
         Vector3[] vertices = new Vector3[verticesCount];
         Vector2[] uvs = new Vector2[verticesCount];
-        int[] triangles = new int[subdivisions * subdivisions * 6];
+        int[] triangles = new int[subdivisions.x * subdivisions.y * 6];
 
-        float stepSize = size / subdivisions;
-        Vector3 offset = new Vector3(size, 0, size) * 0.5f;
+        Vector2 stepSize = size / subdivisions;
+        Vector3 offset = new Vector3(size.x, 0, size.y) * 0.5f;
 
         // Generate vertices and UVs
-        for (int i = 0; i <= subdivisions; i++)
+        for (int i = 0; i <= subdivisions.x; i++)
         {
-            for (int j = 0; j <= subdivisions; j++)
+            for (int j = 0; j <= subdivisions.y; j++)
             {
-                int index = i * (subdivisions + 1) + j;
+                int index = i * (subdivisions.x + 1) + j;
                 
-                vertices[index] = new Vector3(i * stepSize, 0, j * stepSize) - offset;
+                vertices[index] = new Vector3(i * stepSize.x, 0, j * stepSize.y) - offset;
                 
                 // Repeat UVs
-                float u = (float)i / subdivisions;
-                float v = (float)j / subdivisions;
-                uvs[index] = new Vector2(u * uvScale, v * uvScale);
+                float u = (float)i / subdivisions.y;
+                float v = (float)j / subdivisions.x;
+                uvs[index] = new Vector2(u * (uvScale * size.x), v * (uvScale * size.y));
             }
         }
 
         // Generate triangles
         int triIndex = 0;
-        for (int i = 0; i < subdivisions; i++)
+        for (int i = 0; i < subdivisions.x; i++)
         {
-            for (int j = 0; j < subdivisions; j++)
+            for (int j = 0; j < subdivisions.y; j++)
             {
-                int current = i * (subdivisions + 1) + j;
-                int nextRow = (i + 1) * (subdivisions + 1) + j;
+                int current = i * (subdivisions.x + 1) + j;
+                int nextRow = (i + 1) * (subdivisions.y + 1) + j;
                 
                 triangles[triIndex] = current;
                 triangles[triIndex + 1] = current + 1;
