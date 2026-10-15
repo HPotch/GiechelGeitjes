@@ -10,7 +10,6 @@ public class ObstacleSpawner : MonoBehaviour
     [Header("References")]
     [SerializeField] private List<GameObject> obstaclePrefabs = new List<GameObject>();
 
-
     private bool _spawning = false;
 
     private void Update()
