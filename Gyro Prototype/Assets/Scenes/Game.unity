@@ -2265,7 +2265,7 @@ Transform:
   m_GameObject: {fileID: 1427252958}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.14, y: 0.982, z: 0}
+  m_LocalPosition: {x: -0.05, y: 0.42, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -2320,7 +2320,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: feb255ef1135e3bc7a0bfbb7fac6e16d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6dbaec048e6f7014a80c94345cb0f3b0, type: 3}
   m_Color: {r: 0.7586319, g: 0.7586319, b: 0.7586319, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -2546,7 +2546,7 @@ MonoBehaviour:
   positionOffset: {x: 0, y: 0.37, z: 0.25}
   scaleAmount: {x: 0.07, y: 0.05, z: 0}
   scaleOffset: {x: 0.2, y: 0, z: 0}
---- !u!43 &1864711424
+--- !u!43 &1724234730
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2767,7 +2767,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1933539641}
-  m_Mesh: {fileID: 1864711424}
+  m_Mesh: {fileID: 1724234730}
 --- !u!23 &1933539644
 MeshRenderer:
   m_ObjectHideFlags: 0
