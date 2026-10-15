@@ -9,23 +9,16 @@ public class AdressSetter : MonoBehaviour
     [Header("References")]
     [SerializeField] private TMP_InputField IPInput;
     [SerializeField] private TMP_InputField portInput;
-    [SerializeField] private GyroSender gyroSender;
+    [SerializeField] private URPSender urps;
     [SerializeField] private TextMeshProUGUI text;
 
     private void Awake()
     {
-        if (!gyroSender) gyroSender = GetComponent<GyroSender>();
+        if (!urps) urps = GetComponent<URPSender>();
     }
 
     private void Start()
     {
-        // Playerprefs
-        // if (PlayerPrefs.HasKey("IP")) gyroSender.serverIP = PlayerPrefs.GetString("IP");
-        // else PlayerPrefs.SetString("IP", gyroSender.serverIP);
-        // if (PlayerPrefs.HasKey("port")) gyroSender.port = PlayerPrefs.GetInt("port");
-        // else PlayerPrefs.SetInt("port", gyroSender.port);
-        // IPInput.text = gyroSender.serverIP;
-        // portInput.text = gyroSender.port.ToString();
         PlayerPrefs.DeleteAll();
     }
 
@@ -63,8 +56,9 @@ public class AdressSetter : MonoBehaviour
             }
         }
         SetMessage("IP is valid!", Color.green);
-        gyroSender.serverIP = IPInput.text;
-        PlayerPrefs.SetString("IP", gyroSender.serverIP);
+        urps.serverIP = IPInput.text;
+        
+        //PlayerPrefs.SetString("IP", gyroSender.serverIP);
     }
     
     // public void SetPort()
@@ -96,22 +90,22 @@ public class AdressSetter : MonoBehaviour
 
     public void SetPhone1()
     {
-        gyroSender.phoneID = "1";
+        urps.phoneID = "1";
     }
 
     public void SetPhone2()
     {
-        gyroSender.phoneID = "2";
+        urps.phoneID = "2";
     }
     
     public void SetPhone3()
     {
-        gyroSender.phoneID = "3";
+        urps.phoneID = "3";
     }
 
     public void SetPhone4()
     {
-        gyroSender.phoneID = "4";
+        urps.phoneID = "4";
     }
 
     private void SetMessage(String message, Color color, float waitTime = 0f)
@@ -120,6 +114,6 @@ public class AdressSetter : MonoBehaviour
         string hex = $"#{ColorUtility.ToHtmlStringRGB(color).ToUpper()}"; 
         
         text.text = $"<color={hex}>{message}</color>";
-        gyroSender.stopTextTime = waitTime;
+        urps.stopTextTime = waitTime;
     }
 }

@@ -2735,10 +2735,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1863877056}
-  - component: {fileID: 1863877057}
+  - component: {fileID: 1863877059}
   - component: {fileID: 1863877058}
   m_Layer: 0
-  m_Name: GyroSender
+  m_Name: AttitudeSender
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2759,22 +2759,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1863877057
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1863877055}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 427524818ab39b91db275bcf6b3f005e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GyroSender
-  phoneID: 1
-  text: {fileID: 123679411}
-  serverIP: 192.168.0.0
-  port: 12345
 --- !u!114 &1863877058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2790,8 +2774,25 @@ MonoBehaviour:
   warningTime: 3
   IPInput: {fileID: 151237503}
   portInput: {fileID: 0}
-  gyroSender: {fileID: 1863877057}
+  aSender: {fileID: 0}
+  gSender: {fileID: 0}
   text: {fileID: 123679411}
+--- !u!114 &1863877059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1863877055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07f51b5a1c7a473398e8c0e91acee447, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AttitudeSender
+  phoneID: 1
+  text: {fileID: 123679411}
+  serverIP: 192.168.1.123
+  port: 12345
 --- !u!1 &1897357047
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,9 +15,11 @@ public class Movement : MonoBehaviour
     [SerializeField] private float vikingForce = 0.1f;
     [SerializeField] private float vikingTimeInfluence = 5f;
     [SerializeField] private float velocityDrag = 5f;
+    
     [Header("Goat")]
     [SerializeField] private float goatRotateSensitivity = 3f;
     [SerializeField] private GoatPhoneMode goatPhoneMode;
+    
     [Header("Phone Functions")]
     [SerializeField] private MoveMode phone1Mode;
     [SerializeField] private MoveMode phone2Mode;
@@ -34,7 +36,7 @@ public class Movement : MonoBehaviour
 
     private void Update()
     {
-        GyroReceiver gr = GyroReceiver.Instance;
+        GyroManager gr = GyroManager.Instance;
         VikingMove(phone1Mode == MoveMode.viking ? gr.gyro1Values[group]  : gr.gyro2Values[group]);
         GoatMove(phone1Mode == MoveMode.goat ? gr.gyro1Values[group]  : gr.gyro2Values[group]);
         
@@ -73,9 +75,6 @@ public class Movement : MonoBehaviour
         if (!(dir.x < highestValue - vikingMotionRequired)) return;
         // The gyroscope has moved down the sufficient amount to initiate a move
         float force = vikingForce * Mathf.Lerp(vikingTimeInfluence, 1f, (Time.time - highestValueTime) / vikingSpeedRequired);
-        print("Delta: " + (Time.time - highestValueTime));
-        print("T: " + ((Time.time - highestValueTime) / vikingSpeedRequired));
-        print("SpeedInfluence: " + Mathf.Lerp(vikingTimeInfluence, 1f, (Time.time - highestValueTime) / vikingSpeedRequired));
         MoveForward(force);
         _lastVikingXRotations.Clear(); // Clear the list so we don't initiate another move on te same values
     }

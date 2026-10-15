@@ -54,7 +54,7 @@ public class RotateWithVelocity : MonoBehaviour
     
     private void SetRot(float value)
     {
-        transform.eulerAngles = new Vector3(
+        transform.localEulerAngles = new Vector3(
             rotateAxis == Axis.x ? value : 0f,
             rotateAxis == Axis.y ? value : 0f,
             rotateAxis == Axis.z ? value : 0f);

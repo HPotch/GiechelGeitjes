@@ -6,11 +6,11 @@ public class RotateWithGyro : MonoBehaviour
     [SerializeField] private FollowGyro followGyro;
     [SerializeField] private int group = 1;
 
-    private GyroReceiver _gr;
+    private GyroManager _gr;
     
     private void Start()
     {
-        _gr = GyroReceiver.Instance;
+        _gr = GyroManager.Instance;
         if (followGyro == FollowGyro.gyro1) _gr.onGyro1Changes[group].AddListener(SetPosition);
         if (followGyro == FollowGyro.gyro2) _gr.onGyro2Changes[group].AddListener(SetPosition);
     }

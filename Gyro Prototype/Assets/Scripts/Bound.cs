@@ -9,7 +9,7 @@ public class Bound : MonoBehaviour
 
     private Material _mat;
 
-    private void Awake()
+    private void Start()
     {
         _mat = GetComponent<SpriteRenderer>().material;
         transform.parent.localPosition = new Vector3(negative ? GameManager.Instance.bounds * -1f : GameManager.Instance.bounds,00);

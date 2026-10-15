@@ -115,8 +115,8 @@ Material:
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 2
-    - _CurvatureAmount: 0.00001
-    - _CurvePower: 8
+    - _CurvatureAmount: 1
+    - _CurvePower: 3
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
@@ -129,6 +129,8 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _Metallic: 0
+    - _NoiseMultiplier: 0.35
+    - _NoiseScale: 1.35
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueControl: 0

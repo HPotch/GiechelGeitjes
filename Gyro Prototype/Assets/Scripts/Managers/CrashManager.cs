@@ -8,6 +8,8 @@
 // High medium: The player launches back a bit, but stays on the goat. 2 second penalty
 // High hard: The player launches back, we see stars above his head. 5 second penalty
 
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CrashManager : MonoBehaviour
@@ -25,6 +27,7 @@ public class CrashManager : MonoBehaviour
         Low, High
     }
     
+    
     [Header("References")]
     [SerializeField] private PlayerMovement player;
     [Header("Settings")]
@@ -33,16 +36,13 @@ public class CrashManager : MonoBehaviour
     [SerializeField] private float mediumCrashUntil = 0.85f;
     [SerializeField] private float recoverSmoothness = 10f;
     [Header("Small")]
-    [SerializeField] private float smallDisableTime = 0.3f;
-    [SerializeField] private Animation smallForwardAnimation;
+    [SerializeField] private Anim smallForwardAnimation;
     [Header("LowMedium")]
-    [SerializeField] private float lowMediumDisableTime = 1f;
-    [SerializeField] private Animation lowMediumForwardAnimation;
+    [SerializeField] private Anim lowMediumForwardAnimation;
     [Header("LowHigh")]
-    [SerializeField] private float lowHighDisableTime = 2f;
-    [SerializeField] private Animation lowHighForwardAnimation;
+    [SerializeField] private Anim lowHighForwardAnimation;
 
-    private float _forwardForce = 0f;
+    private List<Anim> _activeAnims = new List<Anim>();
     
     // Additional speed is used for crashes with incoming traffic, for example. The speed of the player and of the other moving object should be added together.
     public void Crash(CrashType type, float additionalSpeed = 0f)
@@ -75,27 +75,54 @@ public class CrashManager : MonoBehaviour
 
     private void Update()
     {
-        if (_forwardForce > 0f)
-            transform.localPosition += Vector3.forward * (_forwardForce * Time.deltaTime);
-        else
-            transform.localPosition = Vector3.Lerp(transform.localPosition, Vector3.zero, recoverSmoothness * Time.deltaTime);
+        if (_activeAnims.Count > 0)
+        {
+            Vector3 pos = Vector3.zero;
+            Vector3 rot = Vector3.zero;
+            foreach (Anim a in _activeAnims.ToList())
+            {
+                if (!a.playing)
+                {
+                    _activeAnims.Remove(a);
+                    break;
+                }
+                pos += new Vector3(a.pt[0], a.pt[1], a.pt[2]);
+                rot +=  new Vector3(a.rt[0], a.rt[1], a.rt[2]);
+            }
+
+            if (_activeAnims.Count <= 0) return;
+            transform.localPosition = pos;
+            transform.localEulerAngles = rot;
+            return;
+        }
+
+        // Reset
+        transform.localPosition = Vector3.Lerp(transform.localPosition, Vector3.zero, Time.deltaTime * recoverSmoothness);
+        transform.localEulerAngles = Vector3.Slerp(transform.localEulerAngles, Vector3.zero, Time.deltaTime * recoverSmoothness);
+    }
+    
+    public void StartAnimation(Anim a)
+    {
+        _activeAnims.Add(a);
+        StartCoroutine(a.Animate());
+        player.SetDisableTime(a.time);
     }
 
     private void Small()
     {
-        player.SetDisableTime(smallDisableTime);
+        StartAnimation(smallForwardAnimation);
         print("Small");
     }
 
     private void LowMedium()
     {
-        player.SetDisableTime(lowMediumDisableTime);
+        StartAnimation(lowMediumForwardAnimation);
         print("Low Medium");
     }
 
     private void LowHard()
     {
-        player.SetDisableTime(lowHighDisableTime);
+        StartAnimation(lowHighForwardAnimation);
         print("Low Hard");
     }
 

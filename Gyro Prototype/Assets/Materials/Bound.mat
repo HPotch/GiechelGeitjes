@@ -46,7 +46,11 @@ Material:
     m_Ints: []
     m_Floats:
     - _Alpha: 1
+    - _CurvatureAmount: 1
+    - _CurvePower: 3
     - _Flip_X: 0
+    - _NoiseMultiplier: 0
+    - _NoiseScale: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 0.16470589}
   m_BuildTextureStacks: []

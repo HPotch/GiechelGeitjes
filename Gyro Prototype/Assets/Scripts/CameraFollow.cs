@@ -24,11 +24,17 @@ public class CameraFollow : MonoBehaviour
     
     private Vector3 _velocity;
     private Vector3 _smoothedTargetPos;
+    private Vector3 _offset;
+
+    private void Awake()
+    {
+        _offset = transform.position - target.position;
+    }
 
     private void Update()
     {
         // Set target
-        Vector3 p1 = transform.position, p2 = target.position;
+        Vector3 p1 = transform.position, p2 = target.position + _offset;
         Vector3  targetPosition = new Vector3(
             followAxis.x ? p2.x : p1.x,
             followAxis.y ? p2.y : p1.y,
