@@ -7,6 +7,8 @@ public class ObstacleSpawner : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private Vector2 spawnDistance = new Vector2(0.3f, 4f);
+    [SerializeField] private float distanceAhead = 20f;
+
     [Header("References")]
     [SerializeField] private List<GameObject> obstaclePrefabs = new List<GameObject>();
 
@@ -36,7 +38,11 @@ public class ObstacleSpawner : MonoBehaviour
 
     private void SpawnObstacle()
     {
-        GameObject obstacle = Instantiate(obstaclePrefabs[Random.Range(0, obstaclePrefabs.Count)], transform);
+        Transform leader = GameManager.Instance.Leader();
+
+        Vector3 spawnPosition = leader.position + Vector3.forward * distanceAhead;
+
+		GameObject obstacle = Instantiate(obstaclePrefabs[Random.Range(0, obstaclePrefabs.Count)], transform);
         float range = GameManager.Instance.bounds;
         obstacle.transform.localPosition = new Vector3(0f, 0f, Random.Range(-range, range));
     }

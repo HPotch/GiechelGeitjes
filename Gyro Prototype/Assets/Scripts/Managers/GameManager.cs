@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,7 +12,11 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    [Header("Settings")]
+	[Header("Players")]
+	[SerializeField] private Transform player1;
+	[SerializeField] private Transform player2;
+
+	[Header("Settings")]
     [SerializeField] private float speedScale = 1f;
     [SerializeField] private float moveDecay = 0.1f;
     public float maxSpeed = 10f;
@@ -29,9 +34,20 @@ public class GameManager : MonoBehaviour
         moveAmount = Mathf.Min(moveAmount, maxSpeed);
     }
 
+    public Transform Leader() 
+    {
+		// Find the player thats in front
+		Transform leader = player1.position.z >= player2.position.z
+			? player1
+			: player2;
+
+        return leader;
+	}
+
     private void Update()
     {
-        moveAmount -= moveDecay * Time.deltaTime;
+		if (player1 == null || player2 == null) return;
+		moveAmount -= moveDecay * Time.deltaTime;
         moveAmount = Mathf.Max(moveAmount, 0f);
     }
 }
