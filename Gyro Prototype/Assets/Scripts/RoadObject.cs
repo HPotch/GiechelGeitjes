@@ -10,7 +10,7 @@ public class RoadObject : MonoBehaviour
     }
 
     [SerializeField] private Type type = Type.LowObstacle;
-    [SerializeField] [Tooltip("Units per second")] private Vector3 moveDirection = new Vector3(1f, 0, 0);
+    [SerializeField] [Tooltip("Units per second")] private Vector3 moveDirection = Vector3.back;
 
     [SerializeField] private float destroyBeyond = 21f;
 

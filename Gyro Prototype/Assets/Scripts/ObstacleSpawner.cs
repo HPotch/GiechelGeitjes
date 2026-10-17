@@ -42,8 +42,9 @@ public class ObstacleSpawner : MonoBehaviour
 
         Vector3 spawnPosition = leader.position + Vector3.forward * distanceAhead;
 
-		GameObject obstacle = Instantiate(obstaclePrefabs[Random.Range(0, obstaclePrefabs.Count)], transform);
         float range = GameManager.Instance.bounds;
-        obstacle.transform.localPosition = new Vector3(0f, 0f, Random.Range(-range, range));
+        spawnPosition.x = Random.Range(-range, range);
+
+        GameObject obstacle = Instantiate(obstaclePrefabs[Random.Range(0, obstaclePrefabs.Count)], spawnPosition, Quaternion.identity);
     }
 }
