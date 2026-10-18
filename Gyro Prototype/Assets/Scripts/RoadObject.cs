@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RoadObject : MonoBehaviour
 {
@@ -12,6 +14,15 @@ public class RoadObject : MonoBehaviour
 
     [SerializeField] private float destroyBeyond = 21f;
 
+    public UnityEvent onExecute;
+    public PlayerMovement player;
+    private FallOver _fallOver;
+
+    private void Awake()
+    {
+        _fallOver = GetComponent<FallOver>();
+    }
+
     private void Update()
     {
         // Scroll
@@ -23,27 +34,47 @@ public class RoadObject : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        Collide(collision.collider);
+    }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        Collide(other);
+    }
+
+    private void Collide(Collider collider)
+    {
+        if (collider.gameObject.CompareTag("Destroyer") && type != Type.Item)
+        {
+            FallOver();
+        }
+        
+        if (!collider.gameObject.CompareTag("Player")) return;
+        player = collider.GetComponent<PlayerMovement>();
         switch (type)
         {
             case Type.HighObstacle or  Type.LowObstacle:
-                CollideObstacle(collision.collider); break;
+                CollideObstacle(); break;
             case Type.Item:
-                CollideItem(collision.collider); break;
+                CollideItem(); break;
         }
     }
 
-    private void CollideObstacle(Collider other)
+    private void CollideObstacle()
     {
-        if (!other.gameObject.CompareTag("Player")) return;
         
         if (type == Type.HighObstacle) CrashManager.Instance.Crash(CrashManager.CrashType.High);
         else if (type == Type.LowObstacle) CrashManager.Instance.Crash(CrashManager.CrashType.Low);
     }
 
-    private void CollideItem(Collider other)
+    private void CollideItem()
     {
-        if (!other.gameObject.CompareTag("Player")) return;
-        Debug.Log("Item collected");
+        onExecute.Invoke();
         Destroy(gameObject);
+    }
+
+    private void FallOver()
+    {
+        if (_fallOver) _fallOver.Execute();
     }
 }

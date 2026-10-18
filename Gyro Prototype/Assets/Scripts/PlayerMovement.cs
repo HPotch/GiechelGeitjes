@@ -1,5 +1,5 @@
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -36,8 +36,7 @@ public class PlayerMovement : MonoBehaviour
     
     public UnityEvent afterMove;
 
-    private float _disableTime,_jumpDisableTime;
-    private readonly Dictionary<float, float> _lastVikingXRotations = new Dictionary<float, float>();
+    private float _disableTime, _jumpDisableTime;
 
     public void SetDisableTime(float time)
     {
@@ -62,9 +61,9 @@ public class PlayerMovement : MonoBehaviour
         
         // Keyboard controls
         if (Keyboard.current.leftArrowKey.isPressed || Keyboard.current.aKey.isPressed)
-            goatDirection = -1f;
+            goatDirection = -0.2f;
         if (Keyboard.current.rightArrowKey.isPressed || Keyboard.current.dKey.isPressed)
-            goatDirection = 1f;
+            goatDirection = 0.2f;
         if (Keyboard.current.spaceKey.wasPressedThisFrame || Mouse.current.leftButton.wasPressedThisFrame)
             forward = true;
 
@@ -77,38 +76,7 @@ public class PlayerMovement : MonoBehaviour
     
     private bool GetVikingSpeed(float dir)
     {
-        return dir > forwardMotionRequired;    
-        
-        /*_lastVikingXRotations.Add(Time.time, dir);
-            
-        float lowestValue = Mathf.Infinity;
-        float lowestValueTime = 0f;
-        for (int i = 0; i < _lastVikingXRotations.Count; i++)
-        {
-            // Remove pairs that have expired
-            float time = _lastVikingXRotations.Keys.ToArray()[i];
-            if (time < Time.time - forwardSpeedRequired)
-            {
-                _lastVikingXRotations.Remove(time);
-                continue;
-            }
-            // Get highest value
-            float value = _lastVikingXRotations[time];
-            if (value >= lowestValue) continue;
-            lowestValue = value;
-            lowestValueTime = time;
-        }
-
-        float flickTime = lowestValueTime - Time.time;
-
-        if (dir > lowestValue + forwardMotionRequired)
-            return flickTime.Remap(0f, forwardSpeedRequired, forwardSpeedMultiplier, 1f);
-        return 0f;*/
-    }
-
-    private bool VikingJump(float dir)
-    {
-        return dir < -jumpMotionRequired;
+        return dir > forwardMotionRequired;
     }
     
     private void LeftRight(float dir)
@@ -130,7 +98,6 @@ public class PlayerMovement : MonoBehaviour
     
     private void Forward(float sp = 1f)
     {
-        _lastVikingXRotations.Clear(); // Clear the list so we don't initiate another move on te same values
         if (CastRay()) return;
         GameManager.Instance.Move(sp);
     }
@@ -158,5 +125,31 @@ public class PlayerMovement : MonoBehaviour
     private bool CastRay()
     {
         return Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), 1f, layerMask);
+    }
+
+    public IEnumerator Sprint(float time, float smoothing, float multiplier)
+    {
+        if (GameManager.Instance.sprintMultiplier > 1f) yield break; // Don't execute if already running
+        float timer = 0f;
+        GameManager.Instance.sprintMultiplier = 1f;
+
+        // Speed up until time is over
+        while (timer < time)
+        {
+            timer += Time.deltaTime;
+            GameManager.Instance.sprintMultiplier += smoothing * Time.deltaTime;
+            GameManager.Instance.sprintMultiplier = Mathf.Min(GameManager.Instance.sprintMultiplier, multiplier);
+            yield return null;
+        }
+
+        // Slow down until sprint = 1f
+        while (GameManager.Instance.sprintMultiplier > 1f)
+        {
+            GameManager.Instance.sprintMultiplier -= smoothing * Time.deltaTime;
+            yield return null;
+        }
+
+        // Exit cleanly
+        GameManager.Instance.sprintMultiplier = 1f;
     }
 }

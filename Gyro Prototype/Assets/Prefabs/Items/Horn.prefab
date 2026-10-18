@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 5616403178101211682}
   - component: {fileID: 7746169685103714295}
   - component: {fileID: 893296982456997112}
-  m_Layer: 0
-  m_Name: Item 1
+  - component: {fileID: 6683740840895025441}
+  m_Layer: 3
+  m_Name: Horn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,9 +47,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9722f3e6b163e4f6b150b4f5bf46f69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Obstacle
-  type: 1
+  type: 2
   moveDirection: {x: 1, y: 0, z: 0}
   destroyBeyond: 21
+  onExecute:
+    m_PersistentCalls:
+      m_Calls: []
+  player: {fileID: 0}
 --- !u!65 &893296982456997112
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -70,6 +75,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5, y: 1, z: 1}
   m_Center: {x: -0.25, y: 0.5, z: 0}
+--- !u!114 &6683740840895025441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 487222939939215624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92375953a5de4023db265a634f38cf7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Horn
+  destroyerGoatPrefab: {fileID: 5659804445466844140, guid: 4f23a295f2ed672d8b0192b9bbd10b17, type: 3}
+  goatsOnOneSide: 4
+  spawnDistance: 1
 --- !u!1 &7237765368386397183
 GameObject:
   m_ObjectHideFlags: 0
@@ -80,7 +100,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4774397091719037251}
   - component: {fileID: 405387931662890301}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}

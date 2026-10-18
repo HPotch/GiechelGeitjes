@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
-public class ObstacleSpawner : MonoBehaviour
+public class Spawner : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private Vector2 spawnDistance = new Vector2(0.3f, 4f);
     [Header("References")]
-    [SerializeField] private List<GameObject> obstaclePrefabs = new List<GameObject>();
+    [SerializeField] private List<GameObject> prefabs = new List<GameObject>();
 
     private bool _spawning = false;
 
@@ -35,7 +36,7 @@ public class ObstacleSpawner : MonoBehaviour
 
     private void SpawnObstacle()
     {
-        GameObject obstacle = Instantiate(obstaclePrefabs[Random.Range(0, obstaclePrefabs.Count)], transform);
+        GameObject obstacle = Instantiate(prefabs[Random.Range(0, prefabs.Count)], transform);
         float range = GameManager.Instance.bounds;
         obstacle.transform.localPosition = new Vector3(0f, 0f, Random.Range(-range, range));
     }

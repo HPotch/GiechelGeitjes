@@ -16,13 +16,21 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float moveDecay = 0.1f;
     public float maxSpeed = 10f;
     public float bounds = 5f;
+    public float sprintMultiplier = 1f;
     public enum MotionSickMode { none, aLittle, aLot }
     [Tooltip("'None' might introduce problems for people who don't regularly experience motion sickness too!")]
     public MotionSickMode motionSickMode = MotionSickMode.none;
 
     // Public variables
     [NonSerialized] public float moveAmount = 0f;
+    [NonSerialized] public GameObject firstPlayer, secondPlayer;
 
+    private void Start()
+    {
+        firstPlayer = GameObject.FindGameObjectWithTag("Player");
+        secondPlayer = GameObject.FindGameObjectWithTag("Player");
+    }
+    
     public void Move(float amount)
     {
         moveAmount += amount * speedScale;
