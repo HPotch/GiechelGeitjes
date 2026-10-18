@@ -80,6 +80,8 @@ public class UDPReceiver : MonoBehaviour
 
     private void GetAttitudeValues(int group)
     {
+        if (_udpClients.Count < 2) return;
+
         // Loop through all the mail
         while (_udpClients[group] != null && _udpClients[group].Available > 0) 
         {
