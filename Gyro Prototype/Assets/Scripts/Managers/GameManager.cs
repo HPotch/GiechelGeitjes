@@ -11,9 +11,9 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
+    public GameObject firstPlayer, secondPlayer;
+    
     [Header("Settings")]
-    [SerializeField] private float speedScale = 1f;
-    [SerializeField] private float moveDecay = 0.1f;
     public float maxSpeed = 10f;
     public float bounds = 5f;
     public float sprintMultiplier = 1f;
@@ -23,7 +23,6 @@ public class GameManager : MonoBehaviour
 
     // Public variables
     [NonSerialized] public float moveAmount = 0f;
-    [NonSerialized] public GameObject firstPlayer, secondPlayer;
 
     private void Start()
     {
@@ -31,15 +30,13 @@ public class GameManager : MonoBehaviour
         secondPlayer = GameObject.FindGameObjectWithTag("Player");
     }
     
-    public void Move(float amount)
+    public Transform Leader() 
     {
-        moveAmount += amount * speedScale;
-        moveAmount = Mathf.Min(moveAmount, maxSpeed);
-    }
+        // Find the player that is in front
+        Transform leader = firstPlayer.transform.position.z >= secondPlayer.transform.position.z
+            ? firstPlayer.transform
+            : secondPlayer.transform;
 
-    private void Update()
-    {
-        moveAmount -= moveDecay * Time.deltaTime;
-        moveAmount = Mathf.Max(moveAmount, 0f);
+        return leader;
     }
 }
