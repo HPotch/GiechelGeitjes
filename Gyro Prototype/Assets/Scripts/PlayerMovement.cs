@@ -101,6 +101,8 @@ public class PlayerMovement : MonoBehaviour
             jump = Keyboard.current.wKey.wasPressedThisFrame || jumpDirection > 0.3f;
         }
         
+        print(forward);
+        
 
         LeftRight(goatDirection);
         if (forward) Forward();
