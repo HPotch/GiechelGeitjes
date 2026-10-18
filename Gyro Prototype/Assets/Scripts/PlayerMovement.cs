@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public float moveAmount;
+    
 	private enum MoveMode { viking, goat }
 
 	private enum GoatPhoneMode { vertical, horizontal }
@@ -46,7 +48,6 @@ public class PlayerMovement : MonoBehaviour
     private float _disableTime, _jumpDisableTime;
     private float _steeringDirection;
 	private readonly Dictionary<float, float> _lastVikingXRotations = new Dictionary<float, float>();
-    private float _moveAmount;
 
     private void Start()
     {
@@ -60,8 +61,8 @@ public class PlayerMovement : MonoBehaviour
     
     private void Update()
     {
-        _moveAmount -= moveDecay * Time.deltaTime;
-        _moveAmount = Mathf.Max(_moveAmount, 0f);
+        moveAmount -= moveDecay * Time.deltaTime;
+        moveAmount = Mathf.Max(moveAmount, 0f);
         
         _disableTime -= Time.deltaTime;
         _jumpDisableTime -= Time.deltaTime;
@@ -121,7 +122,7 @@ public class PlayerMovement : MonoBehaviour
         float distToRightBound = GameManager.Instance.bounds - transform.position.x;
         direction -= Mathf.Clamp01(pushBackDistance - distToRightBound);
 
-        float tiltSpeed = tiltCurve.Evaluate(Mathf.Clamp01(GameManager.Instance.moveAmount / GameManager.Instance.maxSpeed));
+        float tiltSpeed = tiltCurve.Evaluate(Mathf.Clamp01(moveAmount / GameManager.Instance.maxSpeed));
 
         float velocity = direction * tiltSpeed * tiltSensitivity * Time.deltaTime;
 
@@ -132,13 +133,13 @@ public class PlayerMovement : MonoBehaviour
     private void Forward(float sp = 1f)
     {
         if (CastRay()) return;
-        _moveAmount += sp * speedScale;
-        _moveAmount = Mathf.Min(_moveAmount, maxSpeed);
+        moveAmount += sp * speedScale;
+        moveAmount = Mathf.Min(moveAmount, maxSpeed);
     }
 
     private void MoveForward()
     {
-		transform.position += transform.forward * (_moveAmount * Time.deltaTime);
+		transform.position += transform.forward * (moveAmount * Time.deltaTime);
 	}
 
     private void Jump(bool initiateJump)

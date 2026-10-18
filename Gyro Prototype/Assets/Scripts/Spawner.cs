@@ -26,7 +26,8 @@ public class Spawner : MonoBehaviour
 
         while (distance > 0f)
         {
-            distance -= GameManager.Instance.moveAmount * Time.deltaTime;
+            // distance -= GameManager.Instance.moveAmount * Time.deltaTime; < Used to be this
+            distance -= 0;
             yield return null;
         }
         

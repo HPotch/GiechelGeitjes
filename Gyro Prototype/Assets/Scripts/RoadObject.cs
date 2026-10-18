@@ -12,7 +12,7 @@ public class RoadObject : MonoBehaviour
     [SerializeField] private Type type = Type.LowObstacle;
     [SerializeField] [Tooltip("Units per second")] private Vector3 moveDirection = new Vector3(1f, 0, 0);
 
-    [SerializeField] private float destroyBeyond = 21f;
+    [SerializeField] private float destroyBeyond = 2f;
 
     public UnityEvent onExecute;
     public PlayerMovement player;
@@ -25,10 +25,7 @@ public class RoadObject : MonoBehaviour
 
     private void Update()
     {
-        // Scroll
-        transform.localPosition += moveDirection * (Time.deltaTime * GameManager.Instance.moveAmount);
-        
-        if (transform.localPosition.x > destroyBeyond)
+        if (transform.position.x > GameManager.Instance.Loser().position.x)
             Destroy(gameObject);
     }
 

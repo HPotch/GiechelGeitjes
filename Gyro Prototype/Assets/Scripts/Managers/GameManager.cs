@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    public GameObject firstPlayer, secondPlayer;
+    [SerializeField] private GameObject firstPlayer, secondPlayer;
     
     [Header("Settings")]
     public float maxSpeed = 10f;
@@ -20,9 +20,6 @@ public class GameManager : MonoBehaviour
     public enum MotionSickMode { none, aLittle, aLot }
     [Tooltip("'None' might introduce problems for people who don't regularly experience motion sickness too!")]
     public MotionSickMode motionSickMode = MotionSickMode.none;
-
-    // Public variables
-    [NonSerialized] public float moveAmount = 0f;
 
     private void Start()
     {
@@ -38,5 +35,15 @@ public class GameManager : MonoBehaviour
             : secondPlayer.transform;
 
         return leader;
+    }
+    
+    public Transform Loser() 
+    {
+        // Find the player that is in front
+        Transform loser = firstPlayer.transform.position.z >= secondPlayer.transform.position.z
+            ? secondPlayer.transform
+            : firstPlayer.transform;
+
+        return loser;
     }
 }

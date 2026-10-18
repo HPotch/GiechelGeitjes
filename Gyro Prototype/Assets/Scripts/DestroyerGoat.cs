@@ -34,7 +34,7 @@ public class DestroyerGoat : MonoBehaviour
     {
         _startX = transform.position.x - player.transform.position.x; // Set start X to be relative to the player
         // Spawn 20 units behind the second player
-        float startPos = (GameManager.Instance.secondPlayer.transform.position.z - clippingBounds) - player.transform.position.z;
+        float startPos = (GameManager.Instance.Loser().position.z - clippingBounds) - player.transform.position.z;
         float distToPlayer = startPos;
 
         // Step 1: move towards the target player

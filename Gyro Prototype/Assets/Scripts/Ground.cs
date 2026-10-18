@@ -32,8 +32,8 @@ public class Ground : MonoBehaviour
 
     private void Start()
     {
-        _firstPlayer = GameManager.Instance.firstPlayer.transform;
-        _secondPlayer = GameManager.Instance.secondPlayer.transform;
+        _firstPlayer = GameManager.Instance.Leader().transform;
+        _secondPlayer = GameManager.Instance.Loser().transform;
     }
 
     private void LateUpdate()

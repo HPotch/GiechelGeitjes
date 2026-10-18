@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class AnimateTransform : MonoBehaviour
 {
+    [Header("References")]
+    [SerializeField] private PlayerMovement playerMovement;
+    
     public float multiplier = 1f;
     [SerializeField] private AnimationCurve curve;
     [SerializeField] private float speed;
@@ -20,7 +23,7 @@ public class AnimateTransform : MonoBehaviour
         _timer += Time.deltaTime;
         if (_timer > speed) _timer %= speed;
 
-        float finalMultiplier = multiplier * (influencedBySpeed ? GameManager.Instance.moveAmount / GameManager.Instance.maxSpeed : 1f);
+        float finalMultiplier = multiplier * (influencedBySpeed ? playerMovement.moveAmount / GameManager.Instance.maxSpeed : 1f);
         
         transform.localEulerAngles = LerpWithOffset(Vector3.zero, rotateAmount * 2f - rotateAmount, rotateOffset) * finalMultiplier;
         transform.localPosition = LerpWithOffset(Vector3.zero, positionAmount * 2f - positionAmount, positionOffset) * finalMultiplier;

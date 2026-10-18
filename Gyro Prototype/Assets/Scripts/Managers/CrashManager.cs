@@ -47,9 +47,9 @@ public class CrashManager : MonoBehaviour
     // Additional speed is used for crashes with incoming traffic, for example. The speed of the player and of the other moving object should be added together.
     public void Crash(CrashType type, float additionalSpeed = 0f)
     {
-        float speedFraction = (GameManager.Instance.moveAmount + additionalSpeed) / GameManager.Instance.maxSpeed;
+        float speedFraction = (player.moveAmount + additionalSpeed) / GameManager.Instance.maxSpeed;
         
-        GameManager.Instance.moveAmount = 0f;
+        player.moveAmount = 0f;
 
         if (speedFraction <= noCrashUntil) return;
         

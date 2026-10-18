@@ -1,3 +1,5 @@
+// DONT NEED THIS SCRIPT ANYMORE
+
 using UnityEngine;
 
 public class Scroller : MonoBehaviour
@@ -7,7 +9,7 @@ public class Scroller : MonoBehaviour
     
     private void Update()
     {
-        transform.localPosition += moveDirection * (Time.deltaTime * GameManager.Instance.moveAmount);
+        transform.localPosition += moveDirection * (Time.deltaTime); // * GameManager.Instance.moveAmount
         transform.localPosition = new Vector3(
             Mathf.Repeat(transform.localPosition.x, modPosition),
             Mathf.Repeat(transform.localPosition.y, modPosition),
