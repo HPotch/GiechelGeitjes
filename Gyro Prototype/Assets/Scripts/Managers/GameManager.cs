@@ -23,16 +23,14 @@ public class GameManager : MonoBehaviour
     [Tooltip("'None' might introduce problems for people who don't regularly experience motion sickness too!")]
     public MotionSickMode motionSickMode = MotionSickMode.none;
 
-    private void Start()
-    {
-        firstPlayer = GameObject.FindGameObjectWithTag("Player");
-        secondPlayer = GameObject.FindGameObjectWithTag("Player");
-    }
-
     private void Update()
     {
-        Leader();
-        Loser();
+        Debug.Log(
+            $"First Player: {(firstPlayer != null ? firstPlayer.name : "NULL")} " +
+            $"Z: {(firstPlayer != null ? firstPlayer.transform.position.z : 0f)}, " +
+            $"Second Player: {(secondPlayer != null ? secondPlayer.name : "NULL")} " +
+            $"Z: {(secondPlayer != null ? secondPlayer.transform.position.z : 0f)}"
+        );
     }
 
     public Transform Leader()

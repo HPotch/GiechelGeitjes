@@ -105,6 +105,8 @@ public class PlayerMovement : MonoBehaviour
         if (forward) Forward();
         Jump(jump);
         MoveForward();
+
+        Debug.Log($"{name} Z: {transform.position.z}, " + $"Parent Z: {transform.parent.position.z}");
     }
 
     private bool GetVikingSpeed(float dir)

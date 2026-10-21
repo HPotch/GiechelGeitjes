@@ -4,101 +4,114 @@ using UnityEngine;
 
 public class FloorManager : MonoBehaviour
 {
-    [Header("Floor Settings")]
+    [Header("Floor Prefab")]
     [SerializeField] private GameObject floorPrefab;
-    [SerializeField] private int trackWidth = 10;
-    [SerializeField] private float tileSize = 1f;
-    [SerializeField] private int distanceAhead = 20;
-    [SerializeField] private float distanceBehind = 0f;
 
-    private int lastLeaderMeter = int.MinValue;
+    [Header("Track Settings")]
+    [SerializeField] private float trackWidth = 10f;
+    [SerializeField] private float stripLength = 1f;
+    [SerializeField] private float distanceAhead = 20f;
+    [SerializeField] private float distanceBehind = 2f;
 
-    // Each entry represents one strip of tiles.
-    private readonly Dictionary<int, List<GameObject>> strips =
-        new Dictionary<int, List<GameObject>>();
-
+    // Each strip is stored by its integer world-space Z position.
+    private readonly Dictionary<int, GameObject> strips =
+        new Dictionary<int, GameObject>();
 
     private void Update()
     {
-        if (floorPrefab == null || GameManager.Instance == null)
+        if (floorPrefab == null)
+        {
+            Debug.LogWarning("FloorManager: Floor Prefab is NOT assigned!");
             return;
+        }
+
+        if (GameManager.Instance == null)
+        {
+            Debug.LogWarning("FloorManager: GameManager.Instance is NULL!");
+            return;
+        }
 
         Transform leader = GameManager.Instance.Leader();
         Transform loser = GameManager.Instance.Loser();
 
         if (leader == null || loser == null)
-            return;
-
-        Debug.Log(leader);
-        Debug.Log(loser);
-
-        // Only changes when the leader crosses a whole metre.
-        int leaderMeter = Mathf.FloorToInt(leader.position.z);
-
-        if (leaderMeter != lastLeaderMeter)
         {
-            lastLeaderMeter = leaderMeter;
-
-            // Keep 20 metres of track ahead of the leader.
-            int lastZ = leaderMeter + distanceAhead;
-
-            for (int z = leaderMeter; z <= lastZ; z++)
-            {
-                if (!strips.ContainsKey(z))
-                    CreateStrip(z);
-            }
+            Debug.LogWarning(
+                "FloorManager: Leader or Loser is NULL! Check player assignments."
+            );
+            return;
         }
 
+        // Find the first strip we need to keep.
+        int firstStrip = Mathf.FloorToInt(
+            (loser.position.z - distanceBehind) / stripLength
+        );
 
-        // Remove strips completely behind the last player.
-        int loserMeter = Mathf.FloorToInt(loser.position.z);
+        // Find the end of the range ahead of the leader.
+        int endStrip = Mathf.CeilToInt(
+            (leader.position.z + distanceAhead) / stripLength
+        );
 
+        // Create missing strips.
+        for (int z = firstStrip; z < endStrip; z++)
+        {
+            if (!strips.ContainsKey(z))
+                CreateStrip(z);
+        }
+        
+        Debug.Log($"FloorManager: Leader Z={leader.position.z:F2}, " + $"Loser Z={loser.position.z:F2}, " + $"Required strips={firstStrip} to {endStrip - 1}, " + $"Existing strips={strips.Count}");
+
+        // Remove strips outside the required range.
         List<int> remove = new List<int>();
 
-        foreach (var strip in strips)
+        foreach (KeyValuePair<int, GameObject> strip in strips)
         {
-            // A strip at z = 10 occupies Z from 10 to 11.
-            // Remove it only when its end is behind the loser.
-            int stripEndZ = strip.Key + 1;
-
-            if (stripEndZ <= loserMeter)
-            {
+            if (strip.Key < firstStrip || strip.Key >= endStrip)
                 remove.Add(strip.Key);
-            }
         }
 
         foreach (int z in remove)
         {
-            foreach (GameObject tile in strips[z])
-            {
-                if (tile != null)
-                    Destroy(tile);
-            }
+            if (strips[z] != null)
+                Destroy(strips[z]);
 
             strips.Remove(z);
         }
-
     }
 
-
-    private void CreateStrip(int stripZ)
+    private void CreateStrip(int z)
     {
-        List<GameObject> tiles = new List<GameObject>();
+        // Each strip occupies [z, z + stripLength] along world Z.
+        Vector3 position = new Vector3(
+            0f,
+            0f,
+            z * stripLength + stripLength / 2f
+        );
 
-        // Centre the track around X = 0.
-        float startX = -(trackWidth * tileSize) / 2f + tileSize / 2f;
+        GameObject strip = Instantiate(
+            floorPrefab,
+            position,
+            Quaternion.identity
+        );
 
-        float centerZ = stripZ * tileSize + tileSize / 2f;
+        // Ensure the prefab has the intended world dimensions.
+        strip.transform.localScale = new Vector3(
+            trackWidth,
+            0.1f,
+            stripLength
+        );
 
-        for (int x = 0; x < trackWidth; x++)
+        strips.Add(z, strip);
+    }
+
+    private void OnDestroy()
+    {
+        foreach (GameObject strip in strips.Values)
         {
-            float centerX = startX + x * tileSize;
-
-            GameObject tile = Instantiate(floorPrefab, new Vector3(centerX, 0f, centerZ), Quaternion.identity, transform);
-
-            tiles.Add(tile);
+            if (strip != null)
+                Destroy(strip);
         }
 
-        strips.Add(stripZ, tiles);
+        strips.Clear();
     }
 }
