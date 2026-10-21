@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.SocialPlatforms.Impl;
 using Random = UnityEngine.Random;
 
 public class Spawner : MonoBehaviour
@@ -11,6 +12,7 @@ public class Spawner : MonoBehaviour
     [Header("References")]
     [SerializeField] private List<GameObject> prefabs = new List<GameObject>();
 
+    private float _lastLeaderZ;
     private bool _spawning = false;
 
     private void Update()
@@ -26,8 +28,8 @@ public class Spawner : MonoBehaviour
 
         while (distance > 0f)
         {
-            // distance -= GameManager.Instance.moveAmount * Time.deltaTime; < Used to be this
-            distance -= 0;
+            distance -= Mathf.Abs(GameManager.Instance.Leader().position.z - _lastLeaderZ);
+            _lastLeaderZ = GameManager.Instance.Leader().position.z;
             yield return null;
         }
         
@@ -37,8 +39,14 @@ public class Spawner : MonoBehaviour
 
     private void SpawnObstacle()
     {
-        GameObject obstacle = Instantiate(prefabs[Random.Range(0, prefabs.Count)], transform);
+        if (prefabs.Count == 0) return;
+
+        Transform leader = GameManager.Instance.Leader();
         float range = GameManager.Instance.bounds;
-        obstacle.transform.localPosition = new Vector3(0f, 0f, Random.Range(-range, range));
+
+        GameObject obstacle = Instantiate(prefabs[Random.Range(0, prefabs.Count)], transform.position, transform.rotation * Quaternion.Euler(0f, 0f, 0f), transform.parent);
+        //obstacle.transform.rotation = Quaternion.identity;
+        
+        obstacle.transform.localPosition = new Vector3(Random.Range(-range, range), transform.position.y, leader.position.z + 10f);
     }
 }

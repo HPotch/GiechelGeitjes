@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     public float maxSpeed = 10f;
     public float bounds = 5f;
     public float sprintMultiplier = 1f;
+
+
     public enum MotionSickMode { none, aLittle, aLot }
     [Tooltip("'None' might introduce problems for people who don't regularly experience motion sickness too!")]
     public MotionSickMode motionSickMode = MotionSickMode.none;
@@ -26,24 +28,30 @@ public class GameManager : MonoBehaviour
         firstPlayer = GameObject.FindGameObjectWithTag("Player");
         secondPlayer = GameObject.FindGameObjectWithTag("Player");
     }
-    
-    public Transform Leader() 
+
+    private void Update()
     {
-        // Find the player that is in front
-        Transform leader = firstPlayer.transform.position.z >= secondPlayer.transform.position.z
+        Leader();
+        Loser();
+    }
+
+    public Transform Leader()
+    {
+        if (firstPlayer == null || secondPlayer == null)
+            return null;
+
+        return firstPlayer.transform.position.z >= secondPlayer.transform.position.z
             ? firstPlayer.transform
             : secondPlayer.transform;
-
-        return leader;
     }
-    
-    public Transform Loser() 
-    {
-        // Find the player that is in front
-        Transform loser = firstPlayer.transform.position.z >= secondPlayer.transform.position.z
-            ? secondPlayer.transform
-            : firstPlayer.transform;
 
-        return loser;
+    public Transform Loser()
+    {
+        if (firstPlayer == null || secondPlayer == null)
+            return null;
+
+        return firstPlayer.transform.position.z < secondPlayer.transform.position.z
+            ? firstPlayer.transform
+            : secondPlayer.transform;
     }
 }
