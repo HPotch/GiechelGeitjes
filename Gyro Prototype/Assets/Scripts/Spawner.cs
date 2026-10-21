@@ -1,14 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.SocialPlatforms.Impl;
 using Random = UnityEngine.Random;
 
 public class Spawner : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private Vector2 spawnDistance = new Vector2(0.3f, 4f);
+
+    [SerializeField] private float spawnDistanceToLeader = 20f;
     [Header("References")]
     [SerializeField] private List<GameObject> prefabs = new List<GameObject>();
 
@@ -25,13 +25,9 @@ public class Spawner : MonoBehaviour
     private IEnumerator SpawnRoutine()
     {
         float distance = Random.Range(spawnDistance.x, spawnDistance.y);
-
-        while (distance > 0f)
-        {
-            distance -= Mathf.Abs(GameManager.Instance.Leader().position.z - _lastLeaderZ);
-            _lastLeaderZ = GameManager.Instance.Leader().position.z;
-            yield return null;
-        }
+        float startZ = GameManager.Instance.Leader().position.z;
+        
+        yield return new WaitUntil(() => Mathf.Abs(startZ - GameManager.Instance.Leader().position.z) > distance);
         
         _spawning = false;
         SpawnObstacle();
@@ -44,9 +40,9 @@ public class Spawner : MonoBehaviour
         Transform leader = GameManager.Instance.Leader();
         float range = GameManager.Instance.bounds;
 
-        GameObject obstacle = Instantiate(prefabs[Random.Range(0, prefabs.Count)], transform.position, transform.rotation * Quaternion.Euler(0f, 0f, 0f), transform.parent);
+        GameObject obstacle = Instantiate(prefabs[Random.Range(0, prefabs.Count)], transform.position, transform.rotation * Quaternion.Euler(0f, 0f, 0f), transform);
         //obstacle.transform.rotation = Quaternion.identity;
         
-        obstacle.transform.localPosition = new Vector3(Random.Range(-range, range), transform.position.y, leader.position.z + 10f);
+        obstacle.transform.localPosition = new Vector3(Random.Range(-range, range), transform.position.y, leader.position.z + spawnDistanceToLeader);
     }
 }

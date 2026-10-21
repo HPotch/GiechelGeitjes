@@ -1,4 +1,3 @@
-
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,10 +7,10 @@ public class FloorManager : MonoBehaviour
     [SerializeField] private GameObject floorPrefab;
 
     [Header("Track Settings")]
-    [SerializeField] private float trackWidth = 10f;
     [SerializeField] private float stripLength = 1f;
     [SerializeField] private float distanceAhead = 20f;
     [SerializeField] private float distanceBehind = 2f;
+    // Strip transform settings are now adjustable in the prefab. This way we prevent generating a new mesh each time.
 
     // Each strip is stored by its integer world-space Z position.
     private readonly Dictionary<int, GameObject> strips =
@@ -91,14 +90,8 @@ public class FloorManager : MonoBehaviour
         GameObject strip = Instantiate(
             floorPrefab,
             position,
-            Quaternion.identity
-        );
-
-        // Ensure the prefab has the intended world dimensions.
-        strip.transform.localScale = new Vector3(
-            trackWidth,
-            0.1f,
-            stripLength
+            Quaternion.identity,
+            transform
         );
 
         strips.Add(z, strip);

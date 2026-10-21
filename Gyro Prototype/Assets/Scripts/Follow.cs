@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class CameraFollow : MonoBehaviour
+public class Follow : MonoBehaviour
 {
     [Serializable]
     private enum Smoothmode
@@ -21,6 +21,7 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private FollowAxis followAxis;
     [SerializeField] private Smoothmode smoothMode = Smoothmode.None;
     [SerializeField] private float smoothness = 20f;
+    [SerializeField] private bool autoFollow = true;
     
     private Vector3 _velocity;
     private Vector3 _smoothedTargetPos;
@@ -32,6 +33,11 @@ public class CameraFollow : MonoBehaviour
     }
 
     private void Update()
+    {
+        if (autoFollow) Execute();
+    }
+
+    public void Execute()
     {
         // Set target
         Vector3 p1 = transform.position, p2 = target.position + _offset;
