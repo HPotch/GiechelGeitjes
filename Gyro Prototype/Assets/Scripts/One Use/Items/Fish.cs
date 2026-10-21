@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class Fish : MonoBehaviour
 {
+    [SerializeField] private float time, distance, height;
+    [SerializeField] private AnimationCurve distanceCurve, heightCurve;
+    
     private RoadObject _roadObject;
 
     private void Awake()
@@ -15,8 +18,9 @@ public class Fish : MonoBehaviour
 
     private void Execute()
     {
+        PlayerMovement player = _roadObject.player;
+        float mul = player.moveAmount / player.maxSpeed;
         
-        // Run
-        print("Fish");
+        player.SuperJump(Mathf.Max(time * mul, 2f), distance * mul, height * mul, distanceCurve, heightCurve);
     }
 }

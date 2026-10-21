@@ -5,7 +5,7 @@ public class Grass : MonoBehaviour
     [SerializeField] private float runTime = 5f;
     [SerializeField] private float runMultiplier = 2f; // The speed will get multiplied with this number
     [SerializeField] private float runSmoothing = 1f;
-
+    [SerializeField] private float fovChange = 20f;
     
     private RoadObject _roadObject;
 
@@ -20,7 +20,6 @@ public class Grass : MonoBehaviour
 
     private void Execute()
     {
-        print("Grass");
-        StartCoroutine(_roadObject.player.Sprint(runTime, runSmoothing, runMultiplier));
+        _roadObject.player.Sprint(runTime, runSmoothing, runMultiplier, fovChange);
     }
 }

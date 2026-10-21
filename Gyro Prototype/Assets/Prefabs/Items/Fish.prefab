@@ -74,8 +74,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.5, y: 1, z: 1}
-  m_Center: {x: -0.25, y: 0.5, z: 0}
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!114 &8676211222678817461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,6 +88,75 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 875ec531249ed9b72a5cc2a4d977232b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fish
+  time: 5
+  distance: 40
+  height: 10
+  distanceCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.16916467
+      outSlope: 0.16916467
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.06745166
+    - serializedVersion: 3
+      time: 0.92659295
+      value: 0.92194706
+      inSlope: 1.5352051
+      outSlope: 1.5352051
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.04282034
+      outWeight: 0.82547027
+    - serializedVersion: 3
+      time: 0.99938965
+      value: 0.9981079
+      inSlope: 0.006716901
+      outSlope: 0.006716901
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.93459815
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  heightCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.000061035156
+      value: -0.001739502
+      inSlope: -2.203849
+      outSlope: -2.203849
+      tangentMode: 0
+      weightedMode: 3
+      inWeight: 0
+      outWeight: 0.34757048
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: -0.11597049
+      outSlope: -0.11597049
+      tangentMode: 0
+      weightedMode: 3
+      inWeight: 0.46150732
+      outWeight: 0.5949298
+    - serializedVersion: 3
+      time: 1.0006104
+      value: -0.0034179688
+      inSlope: -8.634197
+      outSlope: -8.634197
+      tangentMode: 0
+      weightedMode: 3
+      inWeight: 0.03227502
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &2990554861521492207
 GameObject:
   m_ObjectHideFlags: 0

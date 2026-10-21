@@ -1,5 +1,14 @@
 {
   "dependencies": {
+    "com.ram.urp-volumetric-fog": {
+      "version": "https://github.com/ramalingamthangamani/URP-Volumetric-Fog.git#v1.1.0",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.render-pipelines.universal": "17.0.4"
+      },
+      "hash": "b3247d9262fca1c1d55d4e6f6bbfa7a58556e3c0"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,

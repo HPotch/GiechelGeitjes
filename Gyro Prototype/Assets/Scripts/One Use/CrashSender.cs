@@ -79,6 +79,7 @@ public class CrashSender : MonoBehaviour
                 if (!a.playing)
                 {
                     _activeAnims.Remove(a);
+                    SetPosition(); // Set the position to the current animation position. This way we can continue riding after falling over something.
                     break;
                 }
                 pos += new Vector3(a.pt[0], a.pt[1], a.pt[2]);
@@ -95,6 +96,21 @@ public class CrashSender : MonoBehaviour
         transform.localPosition = Vector3.Lerp(transform.localPosition, Vector3.zero, Time.deltaTime * recoverSmoothness);
         transform.localEulerAngles = Vector3.Slerp(transform.localEulerAngles, Vector3.zero, Time.deltaTime * recoverSmoothness);
     }
+
+    private void SetPosition()
+    {
+        player.transform.position = new Vector3(
+            player.transform.position.x,
+            player.transform.position.y,
+            transform.position.z);
+
+        // Reset z so that it doesn't jitter back
+        transform.localPosition = new Vector3(
+            transform.localPosition.x,
+            transform.localPosition.y,
+            0f);
+    }
+    
     
     public void StartAnimation(Anim a)
     {

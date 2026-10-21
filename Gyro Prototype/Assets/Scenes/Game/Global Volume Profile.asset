@@ -24,7 +24,7 @@ MonoBehaviour:
     m_Value: {r: 1, g: 0.9254889, b: 0.8416218, a: 1}
   hueShift:
     m_OverrideState: 1
-    m_Value: -0
+    m_Value: 0
   saturation:
     m_OverrideState: 1
     m_Value: 0
@@ -93,7 +93,7 @@ MonoBehaviour:
   active: 1
   temperature:
     m_OverrideState: 1
-    m_Value: -0
+    m_Value: 0
   tint:
     m_OverrideState: 1
     m_Value: 5
@@ -115,6 +115,7 @@ MonoBehaviour:
   - {fileID: 671493361051062361}
   - {fileID: -3538571747398651400}
   - {fileID: 6662306397616724902}
+  - {fileID: 7727653093158721333}
 --- !u!114 &671493361051062361
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -210,3 +211,70 @@ MonoBehaviour:
   chromaticAbberationIntensity:
     m_OverrideState: 1
     m_Value: 0.593
+--- !u!114 &7727653093158721333
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db9116f2299d3704a991f45d230b39ee, type: 3}
+  m_Name: VolumetricFogVolumeComponent
+  m_EditorClassIdentifier: VolumetricFog.Runtime::VolumetricFog.VolumetricFogVolumeComponent
+  active: 0
+  enabled:
+    m_OverrideState: 1
+    m_Value: 1
+  density:
+    m_OverrideState: 1
+    m_Value: 0.15
+  tint:
+    m_OverrideState: 1
+    m_Value: {r: 0.08108866, g: 0.08108866, b: 0.08108866, a: 1}
+  sceneDarkening:
+    m_OverrideState: 1
+    m_Value: 0.331
+  anisotropy:
+    m_OverrideState: 1
+    m_Value: -0.3
+  maxDistance:
+    m_OverrideState: 1
+    m_Value: 12.7
+  surfaceClarity:
+    m_OverrideState: 1
+    m_Value: 0.001
+  clarityDistance:
+    m_OverrideState: 1
+    m_Value: 1.75
+  highlightLimit:
+    m_OverrideState: 1
+    m_Value: 0
+  baseHeight:
+    m_OverrideState: 1
+    m_Value: 13.5
+  heightFalloff:
+    m_OverrideState: 1
+    m_Value: 0.69
+  mainLightContribution:
+    m_OverrideState: 1
+    m_Value: 26.9
+  additionalLightContribution:
+    m_OverrideState: 0
+    m_Value: 14.68
+  ambient:
+    m_OverrideState: 0
+    m_Value: {r: 0.7886214, g: 0.85062623, b: 0.7863869, a: 1}
+  noiseEnabled:
+    m_OverrideState: 1
+    m_Value: 1
+  noiseScale:
+    m_OverrideState: 1
+    m_Value: 20.2
+  noiseIntensity:
+    m_OverrideState: 1
+    m_Value: 0.872
+  windSpeed:
+    m_OverrideState: 0
+    m_Value: {x: 5.36, y: 0, z: 0.1}

@@ -199,6 +199,73 @@ MonoBehaviour:
   texture:
     m_OverrideState: 1
     m_Value: {fileID: 0}
+--- !u!114 &-6270195868106482355
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db9116f2299d3704a991f45d230b39ee, type: 3}
+  m_Name: VolumetricFogVolumeComponent
+  m_EditorClassIdentifier: VolumetricFog.Runtime::VolumetricFog.VolumetricFogVolumeComponent
+  active: 1
+  enabled:
+    m_OverrideState: 1
+    m_Value: 0
+  density:
+    m_OverrideState: 1
+    m_Value: 0.06
+  tint:
+    m_OverrideState: 1
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+  sceneDarkening:
+    m_OverrideState: 1
+    m_Value: 1
+  anisotropy:
+    m_OverrideState: 1
+    m_Value: 0.35
+  maxDistance:
+    m_OverrideState: 1
+    m_Value: 48
+  surfaceClarity:
+    m_OverrideState: 1
+    m_Value: 0
+  clarityDistance:
+    m_OverrideState: 1
+    m_Value: 1
+  highlightLimit:
+    m_OverrideState: 1
+    m_Value: 0
+  baseHeight:
+    m_OverrideState: 1
+    m_Value: 0
+  heightFalloff:
+    m_OverrideState: 1
+    m_Value: 0.25
+  mainLightContribution:
+    m_OverrideState: 1
+    m_Value: 1
+  additionalLightContribution:
+    m_OverrideState: 1
+    m_Value: 1
+  ambient:
+    m_OverrideState: 1
+    m_Value: {r: 0.03, g: 0.035, b: 0.045, a: 1}
+  noiseEnabled:
+    m_OverrideState: 1
+    m_Value: 0
+  noiseScale:
+    m_OverrideState: 1
+    m_Value: 8
+  noiseIntensity:
+    m_OverrideState: 1
+    m_Value: 0.5
+  windSpeed:
+    m_OverrideState: 1
+    m_Value: {x: 0.2, y: 0, z: 0.1}
 --- !u!114 &-5520245016509672950
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -468,6 +535,7 @@ MonoBehaviour:
   - {fileID: -6288072647309666549}
   - {fileID: 7518938298396184218}
   - {fileID: -1410297666881709256}
+  - {fileID: -6270195868106482355}
 --- !u!114 &853819529557874667
 MonoBehaviour:
   m_ObjectHideFlags: 3

@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class PlayerMovement : MonoBehaviour
 {
     public float moveAmount;
+    public bool invincible = false;
     
 	private enum MoveMode { viking, goat }
 
 	private enum GoatPhoneMode { vertical, horizontal }
 
+    /// Serialized variables ///
     [Header("References")]
     [SerializeField] private Transform jumpTransform;
     public CrashSender crashSender;
@@ -26,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float forwardMotionRequired = 10f; // In degrees
     [SerializeField] private float speedScale = 1f;
     [SerializeField] private float moveDecay = 0.1f;
-    private float maxSpeed = 10f;
+    public float maxSpeed = 10f;
     
     [Header("Tilt")]
     [SerializeField] private float tiltSensitivity = 3f;
@@ -35,11 +38,22 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private MoveMode phone1Mode;
     [SerializeField] private MoveMode phone2Mode;
 
+    /// Private variables ///
     public UnityEvent afterMove;
 
-    private float _disableTime, _jumpDisableTime;
-    private float _steeringDirection;
-	private readonly Dictionary<float, float> _lastVikingXRotations = new Dictionary<float, float>();
+    // Hit
+    private float _disableTime;
+    
+    // Sprint
+    private float _sprintMultiplier = 1f;
+    private Camera _cam;
+    private float _startFov;
+
+    private void Awake()
+    {
+        _cam = crashSender.GetComponentInChildren<Camera>();
+        _startFov = _cam.fieldOfView;
+    }
 
     private void Start()
     {
@@ -57,7 +71,6 @@ public class PlayerMovement : MonoBehaviour
         moveAmount = Mathf.Max(moveAmount, 0f);
         
         _disableTime -= Time.deltaTime;
-        _jumpDisableTime -= Time.deltaTime;
 
         if (_disableTime > 0f) return;
         UDPReceiver udpr = UDPReceiver.Instance;
@@ -76,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
                 goatDirection = -0.2f;
             if (Keyboard.current.rightArrowKey.isPressed)
                 goatDirection = 0.2f;
-            if (Keyboard.current.rightShiftKey.wasPressedThisFrame)
+            if (Keyboard.current.rightShiftKey.wasPressedThisFrame || Mouse.current.rightButton.wasPressedThisFrame)
                 forward = true;
         }
         else
@@ -85,7 +98,7 @@ public class PlayerMovement : MonoBehaviour
                 goatDirection = -0.2f;
             if (Keyboard.current.dKey.isPressed)
                 goatDirection = 0.2f;
-            if (Keyboard.current.leftShiftKey.wasPressedThisFrame)
+            if (Keyboard.current.leftShiftKey.wasPressedThisFrame || Mouse.current.leftButton.wasPressedThisFrame)
                 forward = true;
         }
 
@@ -127,7 +140,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void MoveForward()
     {
-		transform.position += transform.forward * (moveAmount * Time.deltaTime);
+		transform.position += transform.forward * (moveAmount * Time.deltaTime * _sprintMultiplier);
 	}
 
     private bool CastRay()
@@ -135,29 +148,73 @@ public class PlayerMovement : MonoBehaviour
         return Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), 1f, layerMask);
     }
 
-    public IEnumerator Sprint(float time, float smoothing, float multiplier)
+    public void Sprint(float time, float smoothing, float multiplier, float fovChange)
     {
-        if (GameManager.Instance.sprintMultiplier > 1f) yield break; // Don't execute if already running
+        StartCoroutine(SprintRoutine(time, smoothing, multiplier, fovChange));
+    }
+    
+    public IEnumerator SprintRoutine(float time, float smoothing, float multiplier, float fovChange)
+    {
+        if (_sprintMultiplier > 1f) yield break; // Don't execute if already running
         float timer = 0f;
-        GameManager.Instance.sprintMultiplier = 1f;
+        _sprintMultiplier = 1f;
 
         // Speed up until time is over
         while (timer < time)
         {
             timer += Time.deltaTime;
-            GameManager.Instance.sprintMultiplier += smoothing * Time.deltaTime;
-            GameManager.Instance.sprintMultiplier = Mathf.Min(GameManager.Instance.sprintMultiplier, multiplier);
+            print(timer.ToString() + "   " + time.ToString());
+            _sprintMultiplier += smoothing * Time.deltaTime;
+            _sprintMultiplier = Mathf.Min(_sprintMultiplier, multiplier);
+            _cam.fieldOfView = Mathf.Lerp(_cam.fieldOfView, _startFov + fovChange, Time.deltaTime * 5f);
             yield return null;
         }
 
         // Slow down until sprint = 1f
-        while (GameManager.Instance.sprintMultiplier > 1f)
+        while (_sprintMultiplier > 1f)
         {
-            GameManager.Instance.sprintMultiplier -= smoothing * Time.deltaTime;
+            _sprintMultiplier -= smoothing * Time.deltaTime;
+            _cam.fieldOfView = Mathf.Lerp(_cam.fieldOfView, _startFov , Time.deltaTime * 5f); 
             yield return null;
         }
-
+        
         // Exit cleanly
-        GameManager.Instance.sprintMultiplier = 1f;
+        _sprintMultiplier = 1f;
+        _cam.fieldOfView = _startFov;
+    }
+
+    public void SuperJump(float time, float distance, float height, AnimationCurve distanceCurve, AnimationCurve heightCurve)
+    {
+        StartCoroutine(SuperJumpRoutine(time, distance, height, distanceCurve, heightCurve));
+    }
+
+    private IEnumerator SuperJumpRoutine(float time, float distance, float height, AnimationCurve distanceCurve, AnimationCurve heightCurve)
+    {
+        float timer = 0f;
+        Vector3 start = transform.position;
+        _disableTime = time; // Disable while jumping
+        invincible = true; // Cannot get hit during jump
+
+        // Animation
+        while (timer < time)
+        {
+            timer += Time.deltaTime;
+            
+            float td = distanceCurve.Evaluate(timer / time);
+            float th = heightCurve.Evaluate(timer / time);
+            transform.position = new Vector3(
+                start.x,
+                start.y + th * height,
+                start.z + td * distance);
+            
+            afterMove.Invoke();
+            
+            yield return null;
+        }
+        
+        transform.position = new Vector3(start.x, start.y, transform.position.z); // Keep z, the player has traveled, dude
+
+        yield return new WaitForSeconds(1f); // 1 second extra invincibility for when you land right before an obstacle
+        invincible = false; // Hit that viking! Hit! Him!
     }
 }

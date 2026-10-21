@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -41,22 +40,21 @@ public class RoadObject : MonoBehaviour
 
     private void Collide(Collider collider)
     {
+        // Destroyer goat
         if (collider.gameObject.CompareTag("Destroyer") && type != Type.Item)
-        {
-            FallOver();
-        }
+            FallOver(collider.gameObject);
         
-        if (!collider.gameObject.CompareTag("Player"))
-        {
-            Debug.LogWarning("Collider is no player");
-            return;
-        }
+        // Player
         player = collider.GetComponent<PlayerMovement>();
-        if (!player)
+        if (!player) return;
+
+        // Account for invincibility
+        if (player.invincible && type != Type.Item)
         {
-            Debug.LogError("Couldn't find PlayerMovement component");
+            FallOver(collider.gameObject);
             return;
-        }
+        } 
+        
         switch (type)
         {
             case Type.HighObstacle or Type.LowObstacle:
@@ -79,8 +77,11 @@ public class RoadObject : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void FallOver()
+    private void FallOver(GameObject destroyer)
     {
         if (_fallOver) _fallOver.Execute();
+        foreach (Collider col in GetComponents<Collider>())
+            Destroy(col);
+        destroyer.GetComponent<DestroyerGoat>().Hit();
     }
 }

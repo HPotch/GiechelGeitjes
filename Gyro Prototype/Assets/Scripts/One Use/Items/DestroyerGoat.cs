@@ -22,9 +22,25 @@ public class DestroyerGoat : MonoBehaviour
     [SerializeField] private AnimationCurve runFromPlayerCurve;
     [SerializeField] private float runToSidesTime = 2f;
     [SerializeField] private AnimationCurve runToSidesCurve;
+    [SerializeField] private int maxHitPoints = 3; // The max hits the goat can take AFTER HAVING ARRIVED AT THE TARGET PLAYER
 
     private float _startX = 0f;
+    private int _hitPoints;
+    private bool _useHitPoints = false;
 
+    private void Awake()
+    {
+        _hitPoints = maxHitPoints;
+    }
+
+    public void Hit()
+    {
+        if (!_useHitPoints) return;
+        _hitPoints--;
+        if (_hitPoints <= 0)
+            Destroy(gameObject);
+    }
+    
     public void StartRun()
     {
         StartCoroutine(Run());
@@ -42,7 +58,6 @@ public class DestroyerGoat : MonoBehaviour
 
         while (timer < runToPlayerTime)
         {
-            print(timer);
             timer += Time.deltaTime;
             float s = runToPlayerCurve.Evaluate(timer / runToPlayerTime);
             distToPlayer = Mathf.Lerp(startPos, 0f, s);
@@ -50,7 +65,7 @@ public class DestroyerGoat : MonoBehaviour
             yield return null;
         }
         distToPlayer = 0f; // Exit cleanly
-        print("2");
+        _useHitPoints = true;
         
         // Step 2: Wait there
         timer = 0f;
@@ -60,7 +75,6 @@ public class DestroyerGoat : MonoBehaviour
             SetPos(distToPlayer);
             yield return null;
         }
-        print("3");
         
         // Step 3: Run away from the target player
         timer = 0f;
@@ -72,7 +86,6 @@ public class DestroyerGoat : MonoBehaviour
             SetPos(distToPlayer);
             yield return null;
         }
-        print("4");
         
         // Step 4: Run to the sides, so a destroyer goat doesn't just despawn were a player to see them at the end of their run
         timer = 0f;
@@ -83,7 +96,6 @@ public class DestroyerGoat : MonoBehaviour
             SetPos(distToPlayer, s * clippingBounds);
             yield return null;
         }
-        print("5");
         
         // End
         Destroy(gameObject);
