@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private Transform jumpTransform;
+    public CrashSender crashSender;
 
     [Header("Settings")]
     [SerializeField][Tooltip("This curve decides tilt speed, based on the GameManagers max speed")] private AnimationCurve tiltCurve;
@@ -24,24 +24,16 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Forward")]
     [SerializeField] private float forwardMotionRequired = 10f; // In degrees
-    [SerializeField][Tooltip("The viking's gyro must go from top to bottom in this time for a move to occur")] private float forwardSpeedRequired = 0.7f; // In seconds
-    [SerializeField][Tooltip("Time == vikingSpeedRequired means a multiplier of 1, Time == 0f means a multiplier of this value")] private float forwardSpeedMultiplier = 2f;
     [SerializeField] private float speedScale = 1f;
     [SerializeField] private float moveDecay = 0.1f;
     private float maxSpeed = 10f;
     
-    [Header("Jump")]
-    [SerializeField] private float jumpMotionRequired = 1f;
-    [SerializeField] private float jumpTimeOut = 1f;
-    [SerializeField] private Anim jumpAnimation;
-
     [Header("Tilt")]
     [SerializeField] private float tiltSensitivity = 3f;
 
     [Header("Phone Functions")]
     [SerializeField] private MoveMode phone1Mode;
     [SerializeField] private MoveMode phone2Mode;
-    [SerializeField] private int group = 1;
 
     public UnityEvent afterMove;
 
@@ -69,18 +61,16 @@ public class PlayerMovement : MonoBehaviour
 
         if (_disableTime > 0f) return;
         UDPReceiver udpr = UDPReceiver.Instance;
-        List<float> a1v = udpr.func1Values[group].values;
-        List<float> a2v = udpr.func2Values[group].values;
+        List<float> a1v = udpr.func1Values[player].values; // a1v = short for Attitude 1 Values
+        List<float> a2v = udpr.func2Values[player].values; // a2v, well you can figure it out
 
         // Phone controls
         float goatDirection = phone1Mode == MoveMode.goat ? a1v[0] : a2v[0];
         float forwardDirection = phone1Mode == MoveMode.viking ? a1v[2] : a2v[2];
-        float jumpDirection = phone1Mode == MoveMode.viking ? a1v[0] : a2v[0];
         bool forward = GetVikingSpeed(forwardDirection);
 
         // Keyboard controls
-        bool jump;
-        if (player == 1)
+        if (player == 0)
         {
             if (Keyboard.current.leftArrowKey.isPressed)
                 goatDirection = -0.2f;
@@ -88,7 +78,6 @@ public class PlayerMovement : MonoBehaviour
                 goatDirection = 0.2f;
             if (Keyboard.current.rightShiftKey.wasPressedThisFrame)
                 forward = true;
-            jump = Keyboard.current.upArrowKey.wasPressedThisFrame || jumpDirection > 0.3f;
         }
         else
         {
@@ -98,15 +87,13 @@ public class PlayerMovement : MonoBehaviour
                 goatDirection = 0.2f;
             if (Keyboard.current.leftShiftKey.wasPressedThisFrame)
                 forward = true;
-            jump = Keyboard.current.wKey.wasPressedThisFrame || jumpDirection > 0.3f;
         }
 
         LeftRight(goatDirection);
         if (forward) Forward();
-        Jump(jump);
         MoveForward();
 
-        Debug.Log($"{name} Z: {transform.position.z}, " + $"Parent Z: {transform.parent.position.z}");
+        //Debug.Log($"{name} Z: {transform.position.z}, " + $"Parent Z: {transform.parent.position.z}");
         afterMove.Invoke();
     }
 
@@ -142,26 +129,6 @@ public class PlayerMovement : MonoBehaviour
     {
 		transform.position += transform.forward * (moveAmount * Time.deltaTime);
 	}
-
-    private void Jump(bool initiateJump)
-    {
-        // Perform jump
-        if (jumpAnimation.playing)
-        {
-            jumpTransform.localPosition = jumpAnimation.pt;
-            jumpTransform.localEulerAngles = jumpAnimation.rt;
-        }
-        else
-        {
-            jumpTransform.localPosition = Vector3.Lerp(jumpTransform.localPosition, Vector3.zero, 20f * Time.deltaTime);
-            jumpTransform.localEulerAngles = Vector3.Lerp(jumpTransform.eulerAngles, Vector3.zero, 20f * Time.deltaTime);
-        }
-
-        // Init jump
-        if (!initiateJump || _jumpDisableTime > 0f) return;
-        _jumpDisableTime = jumpTimeOut;
-        StartCoroutine(jumpAnimation.Animate());
-    }
 
     private bool CastRay()
     {

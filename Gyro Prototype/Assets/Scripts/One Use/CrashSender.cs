@@ -12,21 +12,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class CrashManager : MonoBehaviour
+public class CrashSender : MonoBehaviour
 {
-    public static CrashManager Instance;
-
-    private void Awake()
-    {
-        if (Instance == null) Instance = this;
-        else  Destroy(gameObject);
-    }
-
     public enum CrashType
     {
         Low, High
     }
-    
     
     [Header("References")]
     [SerializeField] private PlayerMovement player;
@@ -36,11 +27,15 @@ public class CrashManager : MonoBehaviour
     [SerializeField] private float mediumCrashUntil = 0.85f;
     [SerializeField] private float recoverSmoothness = 10f;
     [Header("Small")]
-    [SerializeField] private Anim smallForwardAnimation;
+    [SerializeField] private Anim smallAnimation;
     [Header("LowMedium")]
-    [SerializeField] private Anim lowMediumForwardAnimation;
-    [Header("LowHigh")]
-    [SerializeField] private Anim lowHighForwardAnimation;
+    [SerializeField] private Anim lowMediumAnimation;
+    [Header("LowHard")]
+    [SerializeField] private Anim lowHardAnimation;
+    [Header("HighMedium")]
+    [SerializeField] private Anim highMediumAnimation;
+    [Header("HighHard")]
+    [SerializeField] private Anim highHardAnimation;
 
     private List<Anim> _activeAnims = new List<Anim>();
     
@@ -110,29 +105,31 @@ public class CrashManager : MonoBehaviour
 
     private void Small()
     {
-        StartAnimation(smallForwardAnimation);
-        print("Small");
+        StartAnimation(smallAnimation);
+        //print("Small");
     }
 
     private void LowMedium()
     {
-        StartAnimation(lowMediumForwardAnimation);
-        print("Low Medium");
+        StartAnimation(lowMediumAnimation);
+        //print("Low Medium");
     }
 
     private void LowHard()
     {
-        StartAnimation(lowHighForwardAnimation);
-        print("Low Hard");
+        StartAnimation(lowHardAnimation);
+        //print("Low Hard");
     }
 
     private void HighMedium()
     {
-        print("High Medium");
+        StartAnimation(highMediumAnimation);
+        //print("High Medium");
     }
 
     private void HighHard()
     {
-        print("High Hard");
+        StartAnimation(highHardAnimation);
+        //print("High Hard");
     }
 }

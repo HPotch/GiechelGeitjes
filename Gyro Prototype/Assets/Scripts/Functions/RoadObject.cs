@@ -46,11 +46,20 @@ public class RoadObject : MonoBehaviour
             FallOver();
         }
         
-        if (!collider.gameObject.CompareTag("Player")) return;
+        if (!collider.gameObject.CompareTag("Player"))
+        {
+            Debug.LogWarning("Collider is no player");
+            return;
+        }
         player = collider.GetComponent<PlayerMovement>();
+        if (!player)
+        {
+            Debug.LogError("Couldn't find PlayerMovement component");
+            return;
+        }
         switch (type)
         {
-            case Type.HighObstacle or  Type.LowObstacle:
+            case Type.HighObstacle or Type.LowObstacle:
                 CollideObstacle(); break;
             case Type.Item:
                 CollideItem(); break;
@@ -60,8 +69,8 @@ public class RoadObject : MonoBehaviour
     private void CollideObstacle()
     {
         
-        if (type == Type.HighObstacle) CrashManager.Instance.Crash(CrashManager.CrashType.High);
-        else if (type == Type.LowObstacle) CrashManager.Instance.Crash(CrashManager.CrashType.Low);
+        if (type == Type.HighObstacle) player.crashSender.Crash(CrashSender.CrashType.High);
+        else if (type == Type.LowObstacle) player.crashSender.Crash(CrashSender.CrashType.Low);
     }
 
     private void CollideItem()

@@ -58,7 +58,7 @@ public class GroundSpawner : MonoBehaviour
                 CreateStrip(z);
         }
         
-        Debug.Log($"FloorManager: Leader Z={leader.position.z:F2}, " + $"Loser Z={loser.position.z:F2}, " + $"Required strips={firstStrip} to {endStrip - 1}, " + $"Existing strips={strips.Count}");
+        //Debug.Log($"FloorManager: Leader Z={leader.position.z:F2}, " + $"Loser Z={loser.position.z:F2}, " + $"Required strips={firstStrip} to {endStrip - 1}, " + $"Existing strips={strips.Count}");
 
         // Remove strips outside the required range.
         List<int> remove = new List<int>();

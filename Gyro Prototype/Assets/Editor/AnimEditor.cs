@@ -36,7 +36,7 @@ public class AnimDrawer : PropertyDrawer
     
                 if (targetAnim != null)
                 {
-                    CrashManager.Instance.StartAnimation(targetAnim);
+                    GameManager.Instance.Leader().GetComponent<PlayerMovement>().crashSender.StartAnimation(targetAnim);
                 }
             }
         }

@@ -7,7 +7,6 @@ public class PlaneMesh : MonoBehaviour
 {
     [Header("Strip Settings")]
     [SerializeField] private Vector2 size = new Vector2(10f, 1f);
-    [SerializeField] private float tileSize = 1f;
     [SerializeField] private float uvScale = 1f;
     [SerializeField] private Vector2Int subdivisions = new Vector2Int(10, 1);
 
