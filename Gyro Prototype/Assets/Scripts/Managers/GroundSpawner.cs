@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FloorManager : MonoBehaviour
+public class GroundSpawner : MonoBehaviour
 {
     [Header("Floor Prefab")]
     [SerializeField] private GameObject floorPrefab;
