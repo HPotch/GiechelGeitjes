@@ -100,14 +100,14 @@ public class PlayerMovement : MonoBehaviour
                 forward = true;
             jump = Keyboard.current.wKey.wasPressedThisFrame || jumpDirection > 0.3f;
         }
-        
-        print(forward);
-        
 
         LeftRight(goatDirection);
         if (forward) Forward();
         Jump(jump);
         MoveForward();
+
+        Debug.Log($"{name} Z: {transform.position.z}, " + $"Parent Z: {transform.parent.position.z}");
+        afterMove.Invoke();
     }
 
     private bool GetVikingSpeed(float dir)
@@ -129,7 +129,6 @@ public class PlayerMovement : MonoBehaviour
         float velocity = direction * tiltSpeed * tiltSensitivity * Time.deltaTime;
 
         transform.position += new Vector3(velocity, 0f, 0f);
-        afterMove.Invoke();
     }
 
     private void Forward(float sp = 1f)

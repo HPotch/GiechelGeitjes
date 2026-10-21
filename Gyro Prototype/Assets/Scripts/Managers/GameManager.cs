@@ -17,33 +17,39 @@ public class GameManager : MonoBehaviour
     public float maxSpeed = 10f;
     public float bounds = 5f;
     public float sprintMultiplier = 1f;
+
+
     public enum MotionSickMode { none, aLittle, aLot }
     [Tooltip("'None' might introduce problems for people who don't regularly experience motion sickness too!")]
     public MotionSickMode motionSickMode = MotionSickMode.none;
 
-    private void Start()
+    private void Update()
     {
-        firstPlayer = GameObject.FindGameObjectWithTag("Player");
-        secondPlayer = GameObject.FindGameObjectWithTag("Player");
+        Debug.Log(
+            $"First Player: {(firstPlayer != null ? firstPlayer.name : "NULL")} " +
+            $"Z: {(firstPlayer != null ? firstPlayer.transform.position.z : 0f)}, " +
+            $"Second Player: {(secondPlayer != null ? secondPlayer.name : "NULL")} " +
+            $"Z: {(secondPlayer != null ? secondPlayer.transform.position.z : 0f)}"
+        );
     }
-    
-    public Transform Leader() 
+
+    public Transform Leader()
     {
-        // Find the player that is in front
-        Transform leader = firstPlayer.transform.position.z >= secondPlayer.transform.position.z
+        if (firstPlayer == null || secondPlayer == null)
+            return null;
+
+        return firstPlayer.transform.position.z >= secondPlayer.transform.position.z
             ? firstPlayer.transform
             : secondPlayer.transform;
-
-        return leader;
     }
-    
-    public Transform Loser() 
-    {
-        // Find the player that is in front
-        Transform loser = firstPlayer.transform.position.z >= secondPlayer.transform.position.z
-            ? secondPlayer.transform
-            : firstPlayer.transform;
 
-        return loser;
+    public Transform Loser()
+    {
+        if (firstPlayer == null || secondPlayer == null)
+            return null;
+
+        return firstPlayer.transform.position.z < secondPlayer.transform.position.z
+            ? firstPlayer.transform
+            : secondPlayer.transform;
     }
 }

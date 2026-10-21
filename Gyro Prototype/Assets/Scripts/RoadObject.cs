@@ -25,7 +25,7 @@ public class RoadObject : MonoBehaviour
 
     private void Update()
     {
-        if (transform.position.x > GameManager.Instance.Loser().position.x)
+        if (transform.position.z < GameManager.Instance.Loser().position.z - destroyBeyond)
             Destroy(gameObject);
     }
 
