@@ -82,6 +82,9 @@ public class RoadObject : MonoBehaviour
         if (_fallOver) _fallOver.Execute();
         foreach (Collider col in GetComponents<Collider>())
             Destroy(col);
-        if (destroyer) destroyer.GetComponent<DestroyerGoat>().Hit();
+        
+        if (!destroyer) return;
+        DestroyerGoat dg = destroyer.GetComponent<DestroyerGoat>();
+        dg?.Hit();
     }
 }

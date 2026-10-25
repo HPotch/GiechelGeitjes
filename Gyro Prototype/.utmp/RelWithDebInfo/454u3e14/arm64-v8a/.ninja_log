@@ -1,0 +1,10 @@
+# ninja log v5
+3	869	1792941640349429763	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	69fa9982a95b5985
+2	889	1792941640364584174	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	74190626fbb6ce75
+4	990	1792941640469620404	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	4dbce65f1754d396
+1	1013	1792941640494011042	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	69ae34677f4b7eb5
+2	1154	1792941640627361101	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	e1c9bb54194345e5
+1	1205	1792941640679430214	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	4d0957ed13d461a7
+2	1438	1792941640915479416	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	808c222867f51c26
+0	1548	1792941641024518890	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	73bf27b2843ec8f0
+1548	1599	1792941641083057395	/home/hpotch/Documents/School/Immerse Yourself/GiechelGeitjes/Gyro Prototype/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/454u3e14/obj/arm64-v8a/libgame.so	8cb3f8d7cdcb535f

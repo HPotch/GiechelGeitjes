@@ -29,35 +29,50 @@ public class UDPSender : MonoBehaviour
 
     private void Update()
     {
+        SetText("1"); // Debug
         if (AttitudeSensor.current != null && Accelerometer.current != null)
         {
             // Write message 
-            string message = string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0},{1},{2},{3}",
+            string message = string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0},{1},{2}",
                 phoneID,
                 AttitudeSensor.current.attitude.value.x,
                 Accelerometer.current.acceleration.value.y);
             
+            SetText("2"); // Debug
+            
             // Send message off into the great abyss!
             byte[] data = Encoding.UTF8.GetBytes(message);
             _udpClient.Send(data, data.Length, serverIP, port);
+            SetText("3"); // Debug
         }
+        
+        SetText("4"); // Debug
         
         // Debug
         stopTextTime -= Time.deltaTime;
-        if (stopTextTime <= 0f) SetText();
+        SetText();
     }
 
-    private void SetText()
+    private void SetText(string message = "")
     {
-        AttitudeSensor att = AttitudeSensor.current;
-        string attStatus = att?.enabled == true ? "<color=green>Enabled</color>" : "<color=red>Disabled</color>";
-        Accelerometer acc = Accelerometer.current;
-        string accStatus = acc?.enabled == true ? "<color=green>Enabled</color>" : "<color=red>Disabled</color>";
-        List<float?> messageList = new List<float?>{att?.attitude.value.x, acc?.acceleration.value.y};
-        string messageString = string.Join(",", messageList);
+        if (stopTextTime > 0f) return;
+        if (message == "")
+        {
+            AttitudeSensor att = AttitudeSensor.current;
+            string attStatus = att?.enabled == true ? "<color=green>Enabled</color>" : "<color=red>Disabled</color>";
+            Accelerometer acc = Accelerometer.current;
+            string accStatus = acc?.enabled == true ? "<color=green>Enabled</color>" : "<color=red>Disabled</color>";
+            List<float?> messageList = new List<float?>{att?.attitude.value.x, acc?.acceleration.value.y};
+            string messageString = string.Join(",", messageList);
 
-        foreach (TextMeshProUGUI text in debug)
-            text.text = $"Att {attStatus}; Acc: {accStatus}\nMessage: {messageString}\nPort: {port}";
+            foreach (TextMeshProUGUI text in debug)
+                text.text = $"Att {attStatus}; Acc: {accStatus}\nMessage: {messageString}\nPort: {port}";
+        }
+        else
+        {
+            foreach (TextMeshProUGUI text in debug)
+                text.text = message;
+        }
     }
     
     private void OnApplicationQuit()

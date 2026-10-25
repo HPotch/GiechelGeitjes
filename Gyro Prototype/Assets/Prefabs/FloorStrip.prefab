@@ -103,6 +103,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8237d79e8892f53cf9b3d72a86a18fe4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlaneMesh
-  size: {x: 30, y: 1}
-  uvScale: 1
+  size: {x: 30, y: 2}
+  uvScale: 0.5
   subdivisions: {x: 30, y: 1}

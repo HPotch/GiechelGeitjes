@@ -1,0 +1,2 @@
+/home/hpotch/Documents/School/Immerse Yourself/GiechelGeitjes/Gyro Prototype/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/CMakeLists.txt
+/home/hpotch/Documents/School/Immerse Yourself/GiechelGeitjes/Gyro Prototype/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/GameActivity/CMakeLists.txt

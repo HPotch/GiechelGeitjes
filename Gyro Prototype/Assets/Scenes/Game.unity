@@ -380,7 +380,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FloorManager
   floorPrefab: {fileID: 7839790455747131645, guid: 9221e50520c60324b8c6dc118d4b523d, type: 3}
-  stripLength: 1
+  stripLength: 2
   distanceAhead: 20
   distanceBehind: 2
 --- !u!4 &154615407
@@ -961,7 +961,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AttitudeManager
   sendDebugMessages: 0
   receivePort: 12345
-  dataAmount: 3
+  dataAmount: 2
   onFunc1Change: []
   onFunc2Change: []
   func1Values: []
