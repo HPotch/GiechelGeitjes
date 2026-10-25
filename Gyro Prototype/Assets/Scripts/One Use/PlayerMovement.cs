@@ -176,8 +176,8 @@ public class PlayerMovement : MonoBehaviour
         List<float> upd2Values = udpr.func2Values[player].values;
         
         Steer(GetSteeringInput(upd1Values[0])); // Steer
-        SpeedDecay(GetBreakInput(upd2Values[2])); // Speed decay / break
-        MoveForward(GetMoveInput(upd2Values[2])); // Forward motion
+        SpeedDecay(GetBreakInput(upd2Values[1])); // Speed decay / break
+        MoveForward(GetMoveInput(upd2Values[1])); // Forward motion
         
         afterMove.Invoke();
     }

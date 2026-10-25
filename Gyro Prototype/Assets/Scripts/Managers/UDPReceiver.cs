@@ -34,7 +34,7 @@ public class UDPReceiver : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private bool sendDebugMessages = false;
     [SerializeField] private int receivePort = 12345;
-    [SerializeField] private int dataAmount = 3;
+    [SerializeField] private int dataAmount = 2;
     
     [Header("Events")]
     public List<UnityEvent> onFunc1Change = new List<UnityEvent>();

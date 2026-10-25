@@ -1,20 +1,26 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class AdressSetter : MonoBehaviour
+public class UDPHelper : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private float warningTime = 3f;
     [Header("References")]
     [SerializeField] private TMP_InputField IPInput;
-    [SerializeField] private TMP_InputField portInput;
-    [SerializeField] private URPSender urps;
-    [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private UDPSender udps;
+    [SerializeField] private List<TextMeshProUGUI> debug;
+    [SerializeField] private TextMeshProUGUI info;
+    [SerializeField] private List<GameObject> settings;
+    [SerializeField] private List<GameObject> noSettings;
 
+    private bool _settingScreen = true;
+    
     private void Awake()
     {
-        if (!urps) urps = GetComponent<URPSender>();
+        if (!udps) udps = GetComponent<UDPSender>();
+        SetSettingScreen(true);
     }
 
     private void Start()
@@ -56,7 +62,7 @@ public class AdressSetter : MonoBehaviour
             }
         }
         SetMessage("IP is valid!", Color.green);
-        urps.serverIP = IPInput.text;
+        udps.serverIP = IPInput.text;
         
         //PlayerPrefs.SetString("IP", gyroSender.serverIP);
     }
@@ -90,22 +96,49 @@ public class AdressSetter : MonoBehaviour
 
     public void SetPhone1()
     {
-        urps.phoneID = "1";
+        udps.phoneID = "1";
+        info.text = "Playing as: Goat 1";
+        SetSettingScreen(false);
     }
 
     public void SetPhone2()
     {
-        urps.phoneID = "2";
+        udps.phoneID = "2";
+        info.text = "Playing as: Viking 1";
+        SetSettingScreen(false);
     }
     
     public void SetPhone3()
     {
-        urps.phoneID = "3";
+        udps.phoneID = "3";
+        info.text = "Playing as: Goat 2";
+        SetSettingScreen(false);
     }
 
     public void SetPhone4()
     {
-        urps.phoneID = "4";
+        udps.phoneID = "4";
+        info.text = "Playing as: Viking 2";
+        SetSettingScreen(false);
+    }
+    
+    public void SetSettingScreen(bool set)
+    {
+        _settingScreen = set;
+        if (set)
+        {
+            foreach (GameObject obj in settings)
+                obj.SetActive(true);
+            foreach (GameObject obj in noSettings)
+                obj.SetActive(false);
+        }
+        else
+        {
+            foreach (GameObject obj in settings)
+                obj.SetActive(false);
+            foreach (GameObject obj in noSettings)
+                obj.SetActive(true);
+        }
     }
 
     private void SetMessage(String message, Color color, float waitTime = 0f)
@@ -113,7 +146,8 @@ public class AdressSetter : MonoBehaviour
         if (waitTime == 0f) waitTime = warningTime;
         string hex = $"#{ColorUtility.ToHtmlStringRGB(color).ToUpper()}"; 
         
-        text.text = $"<color={hex}>{message}</color>";
-        urps.stopTextTime = waitTime;
+        foreach (TextMeshProUGUI text in debug)
+            text.text = $"<color={hex}>{message}</color>";
+        udps.stopTextTime = waitTime;
     }
 }

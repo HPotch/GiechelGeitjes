@@ -1,5 +1,5 @@
 // This is a little script that sends attitudeSensor data through the UDP-client (which uses a IP network)
-// The data it sends is formatted as: "ID,x,y,y", where ID is an assignable device ID,  xy is the quaternion rotation of the attitudeSensor and y is the accelerometer's y
+// The data it sends is formatted as: "ID,x,y", where ID is an assignable device ID, x is the euler x rotation of the attitudeSensor and y is the accelerometer's y
 
 using System;
 using System.Collections.Generic;
@@ -8,13 +8,12 @@ using System.Net.Sockets;
 using System.Text;
 using TMPro;
 using UnityEngine.InputSystem;
-using Gyroscope = UnityEngine.InputSystem.Gyroscope;
 
 
-public class URPSender : MonoBehaviour
+public class UDPSender : MonoBehaviour
 {
     public string phoneID = "1";
-    [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private List<TextMeshProUGUI> debug;
     public string serverIP = "192.168.0.0";
     public int port = 12345;
     
@@ -30,13 +29,12 @@ public class URPSender : MonoBehaviour
 
     private void Update()
     {
-        if (AttitudeSensor.current != null && Gyroscope.current != null && Accelerometer.current != null)
+        if (AttitudeSensor.current != null && Accelerometer.current != null)
         {
             // Write message 
             string message = string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0},{1},{2},{3}",
                 phoneID,
                 AttitudeSensor.current.attitude.value.x,
-                Gyroscope.current.angularVelocity.value.y,
                 Accelerometer.current.acceleration.value.y);
             
             // Send message off into the great abyss!
@@ -55,12 +53,11 @@ public class URPSender : MonoBehaviour
         string attStatus = att?.enabled == true ? "<color=green>Enabled</color>" : "<color=red>Disabled</color>";
         Accelerometer acc = Accelerometer.current;
         string accStatus = acc?.enabled == true ? "<color=green>Enabled</color>" : "<color=red>Disabled</color>";
-        Gyroscope gyr = Gyroscope.current;
-        string gyrStatus = gyr?.enabled == true ? "<color=green>Enabled</color>" : "<color=red>Disabled</color>";
-        List<float?> messageList = new List<float?>{att?.attitude.value.x, gyr?.angularVelocity.value.y, acc?.acceleration.value.y};
+        List<float?> messageList = new List<float?>{att?.attitude.value.x, acc?.acceleration.value.y};
         string messageString = string.Join(",", messageList);
 
-        text.text = $"Att {attStatus}; Acc: {accStatus}; Gyr: {gyrStatus}\nMessage: {messageString}\nPort: {port}";
+        foreach (TextMeshProUGUI text in debug)
+            text.text = $"Att {attStatus}; Acc: {accStatus}\nMessage: {messageString}\nPort: {port}";
     }
     
     private void OnApplicationQuit()
