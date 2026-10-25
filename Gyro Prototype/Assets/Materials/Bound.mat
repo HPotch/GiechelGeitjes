@@ -47,7 +47,7 @@ Material:
     m_Floats:
     - _Alpha: 1
     - _CurvatureAmount: 0.5
-    - _CurvePower: 3
+    - _CurvePower: 2.8
     - _Flip_X: 0
     - _NoiseMultiplier: 0
     - _NoiseScale: 0

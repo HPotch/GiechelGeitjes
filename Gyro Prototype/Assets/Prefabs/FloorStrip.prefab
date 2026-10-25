@@ -104,6 +104,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlaneMesh
   size: {x: 30, y: 1}
-  tileSize: 1
   uvScale: 1
   subdivisions: {x: 30, y: 1}

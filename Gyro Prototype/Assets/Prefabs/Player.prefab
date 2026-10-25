@@ -301,8 +301,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   player: 0
-  forwardMotionRequired: 3
-  speedScale: 0.8
+  forwardMotionRequired: 1
+  speedScale: 0.2
   moveDecay: 1
   maxSpeed: 10
   tiltSensitivity: 15

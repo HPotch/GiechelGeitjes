@@ -34,6 +34,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("Tilt")]
     [SerializeField] private float tiltSensitivity = 3f;
 
+    [SerializeField] private float maxTilt = 0.2f;
+
     [Header("Phone Functions")]
     [SerializeField] private MoveMode phone1Mode;
     [SerializeField] private MoveMode phone2Mode;
@@ -86,18 +88,18 @@ public class PlayerMovement : MonoBehaviour
         if (player == 0)
         {
             if (Keyboard.current.leftArrowKey.isPressed)
-                goatDirection = -0.2f;
+                goatDirection = -1f;
             if (Keyboard.current.rightArrowKey.isPressed)
-                goatDirection = 0.2f;
+                goatDirection = 1f;
             if (Keyboard.current.rightShiftKey.wasPressedThisFrame || Mouse.current.rightButton.wasPressedThisFrame)
                 forward = true;
         }
         else
         {
             if (Keyboard.current.aKey.isPressed)
-                goatDirection = -0.2f;
+                goatDirection = -1f;
             if (Keyboard.current.dKey.isPressed)
-                goatDirection = 0.2f;
+                goatDirection = 1f;
             if (Keyboard.current.leftShiftKey.wasPressedThisFrame || Mouse.current.leftButton.wasPressedThisFrame)
                 forward = true;
         }
@@ -117,7 +119,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void LeftRight(float dir)
     {
-        float direction = Mathf.Clamp(dir, -1f, 1f);
+        float direction = Mathf.Clamp(dir, -maxTilt, maxTilt);
 
         float distToLeftBound = GameManager.Instance.bounds - transform.position.x * -1f;
         direction += Mathf.Clamp01(pushBackDistance - distToLeftBound);

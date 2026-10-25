@@ -117,7 +117,7 @@ Material:
     - _ClearCoatSmoothness: 0
     - _Cull: 0
     - _CurvatureAmount: 0.5
-    - _CurvePower: 3
+    - _CurvePower: 2.8
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1

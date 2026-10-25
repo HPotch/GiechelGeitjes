@@ -21,6 +21,14 @@ public class GameManager : MonoBehaviour
     [Tooltip("'None' might introduce problems for people who don't regularly experience motion sickness too!")]
     public MotionSickMode motionSickMode = MotionSickMode.none;
 
+    private void Start()
+    {
+        if (Display.displays.Length > 1)
+            Display.displays[1].Activate();
+        if (Display.displays.Length > 2)
+            Display.displays[2].Activate();
+    }
+    
     /*private void Update()
     {
         Debug.Log(

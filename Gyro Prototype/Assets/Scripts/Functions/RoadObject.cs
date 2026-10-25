@@ -66,9 +66,9 @@ public class RoadObject : MonoBehaviour
 
     private void CollideObstacle()
     {
-        
         if (type == Type.HighObstacle) player.crashSender.Crash(CrashSender.CrashType.High);
         else if (type == Type.LowObstacle) player.crashSender.Crash(CrashSender.CrashType.Low);
+        FallOver();
     }
 
     private void CollideItem()
@@ -77,11 +77,11 @@ public class RoadObject : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void FallOver(GameObject destroyer)
+    private void FallOver(GameObject destroyer = null)
     {
         if (_fallOver) _fallOver.Execute();
         foreach (Collider col in GetComponents<Collider>())
             Destroy(col);
-        destroyer.GetComponent<DestroyerGoat>().Hit();
+        if (destroyer) destroyer.GetComponent<DestroyerGoat>().Hit();
     }
 }
