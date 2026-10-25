@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b67c342d12ca61f4b9ee108094eacaa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimateTransform
-  playerMovement: {fileID: 3857311924406902463}
+  playerMovement: {fileID: 1315237047389266601}
   multiplier: 1
   curve:
     serializedVersion: 2
@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b67c342d12ca61f4b9ee108094eacaa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimateTransform
-  playerMovement: {fileID: 3857311924406902463}
+  playerMovement: {fileID: 1315237047389266601}
   multiplier: 1
   curve:
     serializedVersion: 2
@@ -230,7 +230,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2446911888408187974}
-  - component: {fileID: 3857311924406902463}
+  - component: {fileID: 1315237047389266601}
   - component: {fileID: 3076030683154711215}
   - component: {fileID: 5893106232655313733}
   m_Layer: 0
@@ -256,7 +256,7 @@ Transform:
   - {fileID: 4580232375215833328}
   m_Father: {fileID: 7199648074625671381}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3857311924406902463
+--- !u!114 &1315237047389266601
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -265,49 +265,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 3309351644921129695}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 435d9689413cf47dc8ef2232a092f229, type: 3}
+  m_Script: {fileID: 11500000, guid: 2dd4640753334024a82e69d6966f2021, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PkayerMovement
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveAmount: 0
   invincible: 0
   jumpTransform: {fileID: 4580232375215833328}
-  crashSender: {fileID: 0}
-  tiltCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0.20709229
-      inSlope: 5.1776233
-      outSlope: 5.1776233
-      tangentMode: 0
-      weightedMode: 3
-      inWeight: 0
-      outWeight: 0.14984067
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0.006336229
-      outSlope: 0.006336229
-      tangentMode: 0
-      weightedMode: 3
-      inWeight: 0.43831724
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  pushBackDistance: 1
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 64
-  player: 0
-  forwardMotionRequired: 1
-  speedScale: 0.2
-  moveDecay: 1
-  maxSpeed: 10
-  tiltSensitivity: 15
-  phone1Mode: 1
-  phone2Mode: 0
+  crashSender: {fileID: 8250120664768661636}
+  player: 1
   afterMove:
     m_PersistentCalls:
       m_Calls:
@@ -647,7 +612,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5344d6ad5bf5deef496d9d01294dded0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CrashManager
-  player: {fileID: 3857311924406902463}
+  player: {fileID: 1315237047389266601}
   noCrashUntil: 0.1
   smallCrashUntil: 0.5
   mediumCrashUntil: 0.9
@@ -1378,7 +1343,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b67c342d12ca61f4b9ee108094eacaa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimateTransform
-  playerMovement: {fileID: 3857311924406902463}
+  playerMovement: {fileID: 1315237047389266601}
   multiplier: 0.3
   curve:
     serializedVersion: 2

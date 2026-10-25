@@ -10,14 +10,33 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
+    [Header("References")]
     [SerializeField] private GameObject firstPlayer, secondPlayer;
-    
-    [Header("Settings")]
-    public float maxSpeed = 10f;
-    public float bounds = 5f;
-    public float sprintMultiplier = 1f;
 
+    [Header("Bounds")]
+    public float bounds = 5f;
+    public float pushBackDistance = 1f;
+
+    [Header("Forward")]
+    public float forwardMotionRequired = 10f;
+    public float maxSpeed = 10f;
+    public float speedScale = 1f;
+    public float moveDecay = 0.1f; // In degrees
+    public float forwardTimeOut = 0.3f; // In seconds
+    public LayerMask layerMask;
+
+    [Header("Tilt")]
+    public float tiltSensitivity = 3f;
+    public float maxTilt = 0.2f;
+    public float tiltAcceleration = 10f;
+    
+    [Header("Break")]
+    public float breakRotationRequired = -0.8f;
+    [Tooltip("Break amount is compared to regular speed decay")]
+    public float breakAmount = 3f;
+    
     public enum MotionSickMode { none, aLittle, aLot }
+    [Header("MotionSick")]
     [Tooltip("'None' might introduce problems for people who don't regularly experience motion sickness too!")]
     public MotionSickMode motionSickMode = MotionSickMode.none;
 

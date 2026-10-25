@@ -1,56 +1,59 @@
+// SETTINGS CAN BE FOUND IN GAMEMANAGER
+
+// Deps:
+// - Scene should contain a UDPReceiver
+// - Scene should contain a GameManager
+
+// This script:
+// - Grabs UDP data from the UDPReceiver
+// - Interprets movement based on those values
+//      - Phone 1 rotates to steer
+//      - Phone 2 flicks to move forward
+
+// Public functions:
+// - SetDisableTime - Disables the movement for the set amount of time
+// - Sprint - Applies speed boost to the player
+// - Superjump - Uses animationCurves to animate the player jumping big time
+
+// Public variables
+// - moveAmount - The amount the player is currently moving forward in units/second
+// - invincible - Bool that can be set and read to make the player invincible (isn't used in this script, though!)
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float moveAmount;
+    /// Public variables ///
+    public float moveAmount; // Units/second
     public bool invincible = false;
     
-	private enum MoveMode { viking, goat }
-
-	private enum GoatPhoneMode { vertical, horizontal }
-
     /// Serialized variables ///
     [Header("References")]
     [SerializeField] private Transform jumpTransform;
     public CrashSender crashSender;
 
     [Header("Settings")]
-    [SerializeField][Tooltip("This curve decides tilt speed, based on the GameManagers max speed")] private AnimationCurve tiltCurve;
-    [SerializeField][Tooltip("The player gets pushed back if they are this close to the bounds")] private float pushBackDistance = 1f;
-    [SerializeField][Tooltip("The layer mask used for detecting if the player can move")] private LayerMask layerMask;
-    [SerializeField] private int player = 1;
+    [SerializeField] [Range(0, 1)] private int player = 1; // 0 = left; 1 = right
 
-    [Header("Forward")]
-    [SerializeField] private float forwardMotionRequired = 10f; // In degrees
-    [SerializeField] private float speedScale = 1f;
-    [SerializeField] private float moveDecay = 0.1f;
-    public float maxSpeed = 10f;
-    
-    [Header("Tilt")]
-    [SerializeField] private float tiltSensitivity = 3f;
-
-    [SerializeField] private float maxTilt = 0.2f;
-
-    [Header("Phone Functions")]
-    [SerializeField] private MoveMode phone1Mode;
-    [SerializeField] private MoveMode phone2Mode;
+    /// Events ///
+    public UnityEvent afterMove; // Called after moving is done
 
     /// Private variables ///
-    public UnityEvent afterMove;
-
-    // Hit
-    private float _disableTime;
+    private float _tiltVelocity; // Current steering, smoothed based on GameManager.tiltAcceleration
+    private float _disableTime; // The current time left until enabled. _disableTime < 0f means movement is enabled
+    private float _forwardTimeOut; // Forward motion must use some timeout to work around multiple triggers from one flick
+    private GameManager _gm;
     
     // Sprint
-    private float _sprintMultiplier = 1f;
+    private float _sprintMultiplier = 1f; // The current speed multiplier, used by sprint
     private Camera _cam;
-    private float _startFov;
-
+    private float _startFov; // FOV the camera starts with, used to return to the start FOV
+    
+    
     private void Awake()
     {
         _cam = crashSender.GetComponentInChildren<Camera>();
@@ -59,103 +62,27 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        maxSpeed = GameManager.Instance.maxSpeed;
+        _gm = GameManager.Instance;
     }
-
+    
+    
     public void SetDisableTime(float time)
     {
         _disableTime = time;
     }
-    
-    private void Update()
-    {
-        moveAmount -= moveDecay * Time.deltaTime;
-        moveAmount = Mathf.Max(moveAmount, 0f);
-        
-        _disableTime -= Time.deltaTime;
 
-        if (_disableTime > 0f) return;
-        UDPReceiver udpr = UDPReceiver.Instance;
-        List<float> a1v = udpr.func1Values[player].values; // a1v = short for Attitude 1 Values
-        List<float> a2v = udpr.func2Values[player].values; // a2v, well you can figure it out
-
-        // Phone controls
-        float goatDirection = phone1Mode == MoveMode.goat ? a1v[0] : a2v[0];
-        float forwardDirection = phone1Mode == MoveMode.viking ? a1v[2] : a2v[2];
-        bool forward = GetVikingSpeed(forwardDirection);
-
-        // Keyboard controls
-        if (player == 0)
-        {
-            if (Keyboard.current.leftArrowKey.isPressed)
-                goatDirection = -1f;
-            if (Keyboard.current.rightArrowKey.isPressed)
-                goatDirection = 1f;
-            if (Keyboard.current.rightShiftKey.wasPressedThisFrame || Mouse.current.rightButton.wasPressedThisFrame)
-                forward = true;
-        }
-        else
-        {
-            if (Keyboard.current.aKey.isPressed)
-                goatDirection = -1f;
-            if (Keyboard.current.dKey.isPressed)
-                goatDirection = 1f;
-            if (Keyboard.current.leftShiftKey.wasPressedThisFrame || Mouse.current.leftButton.wasPressedThisFrame)
-                forward = true;
-        }
-
-        LeftRight(goatDirection);
-        if (forward) Forward();
-        MoveForward();
-
-        //Debug.Log($"{name} Z: {transform.position.z}, " + $"Parent Z: {transform.parent.position.z}");
-        afterMove.Invoke();
-    }
-
-    private bool GetVikingSpeed(float dir)
-    {
-        return dir > forwardMotionRequired;
-    }
-
-    private void LeftRight(float dir)
-    {
-        float direction = Mathf.Clamp(dir, -maxTilt, maxTilt);
-
-        float distToLeftBound = GameManager.Instance.bounds - transform.position.x * -1f;
-        direction += Mathf.Clamp01(pushBackDistance - distToLeftBound);
-        float distToRightBound = GameManager.Instance.bounds - transform.position.x;
-        direction -= Mathf.Clamp01(pushBackDistance - distToRightBound);
-
-        float tiltSpeed = tiltCurve.Evaluate(Mathf.Clamp01(moveAmount / GameManager.Instance.maxSpeed));
-
-        float velocity = direction * tiltSpeed * tiltSensitivity * Time.deltaTime;
-
-        transform.position += new Vector3(velocity, 0f, 0f);
-    }
-
-    private void Forward(float sp = 1f)
-    {
-        if (CastRay()) return;
-        moveAmount += sp * speedScale;
-        moveAmount = Mathf.Min(moveAmount, maxSpeed);
-    }
-
-    private void MoveForward()
-    {
-		transform.position += transform.forward * (moveAmount * Time.deltaTime * _sprintMultiplier);
-	}
-
-    private bool CastRay()
-    {
-        return Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), 1f, layerMask);
-    }
-
+    /// <summary>
+    /// Instantiates a sprint
+    /// </summary>
+    /// <param name="time"> Sprint time </param>
+    /// <param name="smoothing"> Sprint increase / decrease per second, on the start and end of sprint</param>
+    /// <param name="multiplier"> Speed multiplier during peak </param>
+    /// <param name="fovChange"> How much the camera fov changes</param>
     public void Sprint(float time, float smoothing, float multiplier, float fovChange)
     {
         StartCoroutine(SprintRoutine(time, smoothing, multiplier, fovChange));
     }
-    
-    public IEnumerator SprintRoutine(float time, float smoothing, float multiplier, float fovChange)
+    private IEnumerator SprintRoutine(float time, float smoothing, float multiplier, float fovChange)
     {
         if (_sprintMultiplier > 1f) yield break; // Don't execute if already running
         float timer = 0f;
@@ -165,7 +92,6 @@ public class PlayerMovement : MonoBehaviour
         while (timer < time)
         {
             timer += Time.deltaTime;
-            print(timer.ToString() + "   " + time.ToString());
             _sprintMultiplier += smoothing * Time.deltaTime;
             _sprintMultiplier = Mathf.Min(_sprintMultiplier, multiplier);
             _cam.fieldOfView = Mathf.Lerp(_cam.fieldOfView, _startFov + fovChange, Time.deltaTime * 5f);
@@ -185,11 +111,18 @@ public class PlayerMovement : MonoBehaviour
         _cam.fieldOfView = _startFov;
     }
 
+    /// <summary>
+    /// Instantiates a super jump
+    /// </summary>
+    /// <param name="time"> Super jump time </param>
+    /// <param name="distance"> How far the player travels on the z axis </param>
+    /// <param name="height"> Height of the jump </param>
+    /// <param name="distanceCurve"> The player will follow this curve on the z axis </param>
+    /// <param name="heightCurve"> The player will follow this curve on the y axis </param>
     public void SuperJump(float time, float distance, float height, AnimationCurve distanceCurve, AnimationCurve heightCurve)
     {
         StartCoroutine(SuperJumpRoutine(time, distance, height, distanceCurve, heightCurve));
     }
-
     private IEnumerator SuperJumpRoutine(float time, float distance, float height, AnimationCurve distanceCurve, AnimationCurve heightCurve)
     {
         float timer = 0f;
@@ -210,7 +143,6 @@ public class PlayerMovement : MonoBehaviour
                 start.z + td * distance);
             
             afterMove.Invoke();
-            
             yield return null;
         }
         
@@ -218,5 +150,128 @@ public class PlayerMovement : MonoBehaviour
 
         yield return new WaitForSeconds(1f); // 1 second extra invincibility for when you land right before an obstacle
         invincible = false; // Hit that viking! Hit! Him!
+    }
+    
+    
+    private void Update()
+    {
+        _disableTime -= Time.deltaTime;
+
+        if (_disableTime <= 0f) Move();
+        else moveAmount = 0f; // Remove all built up velocity
+    }
+
+    private void Move()
+    {
+        // Get values
+        UDPReceiver udpr = UDPReceiver.Instance;
+        List<float> upd1Values = udpr.func1Values[player].values;
+        List<float> upd2Values = udpr.func2Values[player].values;
+        
+        Steer(GetSteeringInput(upd1Values[0])); // Steer
+        SpeedDecay(GetBreakInput(upd2Values[2])); // Speed decay / break
+        MoveForward(GetMoveInput(upd2Values[2])); // Forward motion
+        
+        afterMove.Invoke();
+    }
+
+    private float GetSteeringInput(float udpValue)
+    {
+        // UDP input
+        float value = udpValue * _gm.tiltSensitivity;
+        
+        // Keyboard input
+        if (player == 0)
+        {
+            if (Keyboard.current.leftArrowKey.isPressed) value = -_gm.maxTilt;
+            if (Keyboard.current.rightArrowKey.isPressed) value = _gm.maxTilt;
+        }
+        else
+        {
+            if (Keyboard.current.aKey.isPressed) value = -_gm.maxTilt;
+            if (Keyboard.current.dKey.isPressed) value = _gm.maxTilt;
+        }
+        
+        // Clamp to max tilt
+        return Mathf.Clamp(value , -_gm.maxTilt, _gm.maxTilt);
+    }
+
+    private void Steer(float dir)
+    {
+        // Push away from bounds
+        float distToLeftBound = GameManager.Instance.bounds - transform.position.x * -1f;
+        dir += Mathf.Clamp01(_gm.pushBackDistance - distToLeftBound) * _gm.maxTilt;
+        float distToRightBound = GameManager.Instance.bounds - transform.position.x;
+        dir -= Mathf.Clamp01(_gm.pushBackDistance - distToRightBound) * _gm.maxTilt;
+
+        // Smoothly interpret movement
+        _tiltVelocity = Mathf.Lerp(_tiltVelocity, dir, Time.deltaTime * _gm.tiltAcceleration);
+        
+        // Apply
+        transform.position += new Vector3(_tiltVelocity * Time.deltaTime, 0f, 0f);
+    }
+
+    private bool GetMoveInput(float udpValue)
+    {
+        // UDP input
+        bool value = udpValue > _gm.forwardMotionRequired;
+        
+        // Keyboard input
+        if (player == 0)
+            value = Keyboard.current.enterKey.wasPressedThisFrame || Mouse.current.rightButton.wasPressedThisFrame || value;
+        else
+            value = Keyboard.current.wKey.wasPressedThisFrame || Mouse.current.leftButton.wasPressedThisFrame || value;
+        
+        // Disable if timeout
+        _forwardTimeOut -= Time.deltaTime;
+        if (_forwardTimeOut > 0f) value = false;
+        if (value) _forwardTimeOut = _gm.forwardTimeOut;
+        
+        return value;
+    }
+    
+    private void MoveForward(bool move)
+    {
+        // Return if colliding with an object
+        if (Physics.Raycast(
+            transform.position,
+            transform.TransformDirection(Vector3.forward),
+            0.1f,
+            _gm.layerMask)
+            ) return;
+        
+        // Add speed
+        if (move)
+        {
+            moveAmount += _gm.speedScale;
+            moveAmount = Mathf.Min(moveAmount, GameManager.Instance.maxSpeed);
+        }
+        
+        // Apply forward motion
+        transform.position += transform.forward * (moveAmount * Time.deltaTime * _sprintMultiplier);
+    }
+
+    private bool GetBreakInput(float udpValue)
+    {
+        // UDP input
+        bool value = udpValue < _gm.breakRotationRequired;
+        
+        // Keyboard input
+        if (player == 0)
+            value = Keyboard.current.rightShiftKey.isPressed || value;
+        else
+            value = Keyboard.current.leftShiftKey.isPressed || value;
+            
+        return value;
+    }
+
+    private void SpeedDecay(bool useBreak = false)
+    {
+        if (useBreak)
+            moveAmount -= _gm.moveDecay * _gm.breakAmount * Time.deltaTime;
+        else
+            moveAmount -= _gm.moveDecay * Time.deltaTime;
+        
+        moveAmount = Mathf.Max(moveAmount, 0f);
     }
 }

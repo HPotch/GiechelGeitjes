@@ -333,9 +333,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   firstPlayer: {fileID: 827096603}
   secondPlayer: {fileID: 1874284771}
-  maxSpeed: 10
   bounds: 5
-  sprintMultiplier: 1
+  pushBackDistance: 1.5
+  forwardMotionRequired: 2
+  maxSpeed: 15
+  speedScale: 1.2
+  moveDecay: 1.5
+  forwardTimeOut: 0.3
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  tiltSensitivity: 12
+  maxTilt: 4
+  tiltAcceleration: 10
+  breakRotationRequired: -0.8
+  breakAmount: 10
   motionSickMode: 1
 --- !u!1 &154615405
 GameObject:
@@ -430,7 +442,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81501a8ca9a9e24e5a662d54108edfdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bound
-  player: {fileID: 1874284772}
+  player: {fileID: 1874284778}
   negative: 0
   distance: 2
   power: 0.5
@@ -1260,7 +1272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81501a8ca9a9e24e5a662d54108edfdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bound
-  player: {fileID: 1874284772}
+  player: {fileID: 1874284778}
   negative: 0
   distance: 2
   power: 0.5
@@ -1367,17 +1379,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2446911888408187974, guid: 1fdec0f34073e7fb1888015588a771c9, type: 3}
   m_PrefabInstance: {fileID: 1876516305469856875}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &827096606 stripped
+--- !u!114 &827096608 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3857311924406902463, guid: 1fdec0f34073e7fb1888015588a771c9, type: 3}
+  m_CorrespondingSourceObject: {fileID: 1315237047389266601, guid: 1fdec0f34073e7fb1888015588a771c9, type: 3}
   m_PrefabInstance: {fileID: 1876516305469856875}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 827096603}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 435d9689413cf47dc8ef2232a092f229, type: 3}
+  m_Script: {fileID: 11500000, guid: 2dd4640753334024a82e69d6966f2021, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PkayerMovement
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
 --- !u!1 &836267843
 GameObject:
   m_ObjectHideFlags: 0
@@ -1740,7 +1752,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81501a8ca9a9e24e5a662d54108edfdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bound
-  player: {fileID: 827096606}
+  player: {fileID: 827096608}
   negative: 1
   distance: 2
   power: 0.5
@@ -1822,7 +1834,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81501a8ca9a9e24e5a662d54108edfdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bound
-  player: {fileID: 827096606}
+  player: {fileID: 827096608}
   negative: 0
   distance: 2
   power: 0.5
@@ -2075,7 +2087,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81501a8ca9a9e24e5a662d54108edfdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bound
-  player: {fileID: 1874284772}
+  player: {fileID: 1874284778}
   negative: 1
   distance: 2
   power: 0.5
@@ -2184,7 +2196,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81501a8ca9a9e24e5a662d54108edfdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bound
-  player: {fileID: 827096606}
+  player: {fileID: 827096608}
   negative: 0
   distance: 2
   power: 0.5
@@ -2386,7 +2398,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81501a8ca9a9e24e5a662d54108edfdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bound
-  player: {fileID: 1874284772}
+  player: {fileID: 1874284778}
   negative: 1
   distance: 2
   power: 0.5
@@ -2475,6 +2487,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2037212320}
     - target: {fileID: 4582644199471701311, guid: 1fdec0f34073e7fb1888015588a771c9, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4582644199471701311, guid: 1fdec0f34073e7fb1888015588a771c9, type: 3}
       propertyPath: m_TargetDisplay
       value: 1
       objectReference: {fileID: 0}
@@ -2529,22 +2545,22 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3309351644921129695, guid: 1fdec0f34073e7fb1888015588a771c9, type: 3}
   m_PrefabInstance: {fileID: 1800035677}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1874284772 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3857311924406902463, guid: 1fdec0f34073e7fb1888015588a771c9, type: 3}
-  m_PrefabInstance: {fileID: 1800035677}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1874284771}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 435d9689413cf47dc8ef2232a092f229, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PkayerMovement
 --- !u!4 &1874284775 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2446911888408187974, guid: 1fdec0f34073e7fb1888015588a771c9, type: 3}
   m_PrefabInstance: {fileID: 1800035677}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1874284778 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1315237047389266601, guid: 1fdec0f34073e7fb1888015588a771c9, type: 3}
+  m_PrefabInstance: {fileID: 1800035677}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1874284771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dd4640753334024a82e69d6966f2021, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
 --- !u!1 &1990061293
 GameObject:
   m_ObjectHideFlags: 0
@@ -2650,7 +2666,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81501a8ca9a9e24e5a662d54108edfdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bound
-  player: {fileID: 827096606}
+  player: {fileID: 827096608}
   negative: 1
   distance: 2
   power: 0.5
@@ -2679,6 +2695,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 336464919443405595, guid: 1fdec0f34073e7fb1888015588a771c9, type: 3}
       propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1315237047389266601, guid: 1fdec0f34073e7fb1888015588a771c9, type: 3}
+      propertyPath: player
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3749893531941091929, guid: 1fdec0f34073e7fb1888015588a771c9, type: 3}

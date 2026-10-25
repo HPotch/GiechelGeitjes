@@ -19,7 +19,7 @@ public class Fish : MonoBehaviour
     private void Execute()
     {
         PlayerMovement player = _roadObject.player;
-        float mul = player.moveAmount / player.maxSpeed;
+        float mul = player.moveAmount / GameManager.Instance.maxSpeed;
         
         player.SuperJump(Mathf.Max(time * mul, 2f), distance * mul, height * mul, distanceCurve, heightCurve);
     }
