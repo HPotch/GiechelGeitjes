@@ -346,8 +346,9 @@ MonoBehaviour:
   tiltSensitivity: 12
   maxTilt: 4
   tiltAcceleration: 10
-  breakRotationRequired: -0.8
+  breakRotationRequired: -0.75
   breakAmount: 10
+  breakTime: 0.1
   motionSickMode: 1
 --- !u!1 &154615405
 GameObject:

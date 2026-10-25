@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour
     public float breakRotationRequired = -0.8f;
     [Tooltip("Break amount is compared to regular speed decay")]
     public float breakAmount = 3f;
+    [Tooltip("The time the player should break before actually executing")] // Helps prevent accidental breaks or inaccuracies
+    public float breakTime = 0.35f; // In seconds
     
     public enum MotionSickMode { none, aLittle, aLot }
     [Header("MotionSick")]

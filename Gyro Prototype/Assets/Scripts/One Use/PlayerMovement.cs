@@ -18,6 +18,7 @@
 // Public variables
 // - moveAmount - The amount the player is currently moving forward in units/second
 // - invincible - Bool that can be set and read to make the player invincible (isn't used in this script, though!)
+// - breaking - Bool that is set to whether the player is breaking or not
 
 using System.Collections;
 using System.Collections.Generic;
@@ -30,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
     /// Public variables ///
     public float moveAmount; // Units/second
     public bool invincible = false;
+    public bool breaking = false;
     
     /// Serialized variables ///
     [Header("References")]
@@ -46,6 +48,7 @@ public class PlayerMovement : MonoBehaviour
     private float _tiltVelocity; // Current steering, smoothed based on GameManager.tiltAcceleration
     private float _disableTime; // The current time left until enabled. _disableTime < 0f means movement is enabled
     private float _forwardTimeOut; // Forward motion must use some timeout to work around multiple triggers from one flick
+    private float _breakTime = 0f;
     private GameManager _gm;
     
     // Sprint
@@ -127,6 +130,7 @@ public class PlayerMovement : MonoBehaviour
     {
         float timer = 0f;
         Vector3 start = transform.position;
+        float prevZPos = 0f;
         _disableTime = time; // Disable while jumping
         invincible = true; // Cannot get hit during jump
 
@@ -137,6 +141,8 @@ public class PlayerMovement : MonoBehaviour
             
             float td = distanceCurve.Evaluate(timer / time);
             float th = heightCurve.Evaluate(timer / time);
+
+            prevZPos = transform.position.z;
             transform.position = new Vector3(
                 start.x,
                 start.y + th * height,
@@ -146,6 +152,7 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
         
+        moveAmount = (transform.position.z - prevZPos) / Time.deltaTime; // Set the right velocity
         transform.position = new Vector3(start.x, start.y, transform.position.z); // Keep z, the player has traveled, dude
 
         yield return new WaitForSeconds(1f); // 1 second extra invincibility for when you land right before an obstacle
@@ -261,7 +268,12 @@ public class PlayerMovement : MonoBehaviour
             value = Keyboard.current.rightShiftKey.isPressed || value;
         else
             value = Keyboard.current.leftShiftKey.isPressed || value;
+
+        if (!value) _breakTime = 0f;
+        else _breakTime += Time.deltaTime;
+        value = _breakTime > _gm.breakTime;
             
+        breaking = value;
         return value;
     }
 
