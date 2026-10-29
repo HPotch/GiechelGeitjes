@@ -2510,7 +2510,7 @@
     "m_Title": "Sample Normal",
     "m_Position": {
         "x": -1008.0,
-        "y": 810.0
+        "y": 810.0001220703125
     }
 }
 
@@ -3213,7 +3213,7 @@
     "m_ObjectId": "6c2331ef19754dfcbabc85f1c59df54e",
     "m_Title": "Sample Color",
     "m_Position": {
-        "x": -1071.0,
+        "x": -1071.0001220703125,
         "y": 441.0
     }
 }

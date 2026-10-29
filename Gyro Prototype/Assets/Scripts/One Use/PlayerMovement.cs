@@ -53,14 +53,12 @@ public class PlayerMovement : MonoBehaviour
     
     // Sprint
     private float _sprintMultiplier = 1f; // The current speed multiplier, used by sprint
-    private Camera _cam;
-    private float _startFov; // FOV the camera starts with, used to return to the start FOV
+    private Cam _cam;
     
     
     private void Awake()
     {
-        _cam = crashSender.GetComponentInChildren<Camera>();
-        _startFov = _cam.fieldOfView;
+        _cam = crashSender.GetComponentInChildren<Cam>();
     }
 
     private void Start()
@@ -97,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
             timer += Time.deltaTime;
             _sprintMultiplier += smoothing * Time.deltaTime;
             _sprintMultiplier = Mathf.Min(_sprintMultiplier, multiplier);
-            _cam.fieldOfView = Mathf.Lerp(_cam.fieldOfView, _startFov + fovChange, Time.deltaTime * 5f);
+            _cam.additionalFov = Mathf.Lerp(_cam.additionalFov, fovChange, Time.deltaTime * 5f);
             yield return null;
         }
 
@@ -105,13 +103,13 @@ public class PlayerMovement : MonoBehaviour
         while (_sprintMultiplier > 1f)
         {
             _sprintMultiplier -= smoothing * Time.deltaTime;
-            _cam.fieldOfView = Mathf.Lerp(_cam.fieldOfView, _startFov , Time.deltaTime * 5f); 
+            _cam.additionalFov = Mathf.Lerp(_cam.additionalFov, 0f , Time.deltaTime * 5f); 
             yield return null;
         }
         
         // Exit cleanly
         _sprintMultiplier = 1f;
-        _cam.fieldOfView = _startFov;
+        _cam.additionalFov = 0f;
     }
 
     /// <summary>
@@ -153,6 +151,7 @@ public class PlayerMovement : MonoBehaviour
         }
         
         moveAmount = (transform.position.z - prevZPos) / Time.deltaTime; // Set the right velocity
+        _disableTime = 0f;
         transform.position = new Vector3(start.x, start.y, transform.position.z); // Keep z, the player has traveled, dude
 
         yield return new WaitForSeconds(1f); // 1 second extra invincibility for when you land right before an obstacle
@@ -162,6 +161,7 @@ public class PlayerMovement : MonoBehaviour
     
     private void Update()
     {
+        if (player == 0) print(moveAmount);
         _disableTime -= Time.deltaTime;
 
         if (_disableTime <= 0f) Move();

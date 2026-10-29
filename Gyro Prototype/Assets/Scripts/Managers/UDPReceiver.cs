@@ -61,7 +61,6 @@ public class UDPReceiver : MonoBehaviour
             onFunc1Change.Add(new UnityEvent());
             onFunc2Change.Add(new UnityEvent());
             
-            
             var tempValues = new List<float>(); 
             for (int j = 0; j < dataAmount; j++) { tempValues.Add(0f); }
 
