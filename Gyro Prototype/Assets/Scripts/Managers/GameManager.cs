@@ -42,6 +42,10 @@ public class GameManager : MonoBehaviour
     [Tooltip("'None' might introduce problems for people who don't regularly experience motion sickness too!")]
     public MotionSickMode motionSickMode = MotionSickMode.none;
 
+    [Header("Start")]
+    public bool started = false;
+    public Transform startPosition;
+
     private void Start()
     {
         if (Display.displays.Length > 1)
@@ -50,15 +54,18 @@ public class GameManager : MonoBehaviour
             Display.displays[2].Activate();
     }
     
-    /*private void Update()
+    private void Update()
     {
-        Debug.Log(
+        /*Debug.Log(
             $"First Player: {(firstPlayer ? firstPlayer.name : "NULL")} " +
             $"Z: {(firstPlayer ? firstPlayer.transform.position.z : 0f)}, " +
             $"Second Player: {(secondPlayer ? secondPlayer.name : "NULL")} " +
             $"Z: {(secondPlayer ? secondPlayer.transform.position.z : 0f)}"
-        );
-    }*/
+        );*/
+
+        if (firstPlayer.transform.position.z >= startPosition.position.z &&
+            secondPlayer.transform.position.z >= startPosition.position.z) StartManager.Instance.StartGame();
+    }
 
     public Transform Leader()
     {

@@ -71,6 +71,11 @@ public class AudioManager : MonoBehaviour
     
     public AudioObject PlayAudioSettings(AudioSettings a)
     {
+        if (a.clips.Length == 0)
+        {
+            Debug.LogError($"No clips passed in audioSettings {a}");
+            return null;
+        }
         return PlayAudio(a.clips[Random.Range(0, a.clips.Length)], a.volume + Random.Range(-a.randomVolume, a.randomVolume), a.pitch + Random.Range(-a.randomPitch, a.randomPitch), a.startFade, a.endFade, a.endLoop, a.pan, a.loop, a.mixerGroup);
     }
 

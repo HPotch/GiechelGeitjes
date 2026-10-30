@@ -161,10 +161,16 @@ public class PlayerMovement : MonoBehaviour
     
     private void Update()
     {
-        if (player == 0) print(moveAmount);
         _disableTime -= Time.deltaTime;
 
-        if (_disableTime <= 0f) Move();
+        if (_disableTime <= 0f)
+        {
+            // While wait for other player to reach start, break, else move
+            if (!GameManager.Instance.started && transform.position.z > GameManager.Instance.startPosition.position.z)
+                SpeedDecay(true); 
+            else
+                Move();
+        }
         else moveAmount = 0f; // Remove all built up velocity
     }
 
