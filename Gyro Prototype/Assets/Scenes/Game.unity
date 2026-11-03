@@ -620,6 +620,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 174307312}
   m_CullTransparentMesh: 1
+--- !u!114 &202173680 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9157346572172150870, guid: fc484da09e7c540cabb2eb785ea24247, type: 3}
+  m_PrefabInstance: {fileID: 395494835}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &219732512
 GameObject:
   m_ObjectHideFlags: 0
@@ -1496,6 +1507,30 @@ PrefabInstance:
       propertyPath: player2
       value: 
       objectReference: {fileID: 860308424}
+    - target: {fileID: 7632982861642304800, guid: fc484da09e7c540cabb2eb785ea24247, type: 3}
+      propertyPath: spriteOneP1
+      value: 
+      objectReference: {fileID: 1180934658, guid: b40d30c9642df564f839ce8c0b42153f, type: 3}
+    - target: {fileID: 7632982861642304800, guid: fc484da09e7c540cabb2eb785ea24247, type: 3}
+      propertyPath: spriteOneP2
+      value: 
+      objectReference: {fileID: 688587599, guid: b6bb6ccc1fc315245994813dedd66253, type: 3}
+    - target: {fileID: 7632982861642304800, guid: fc484da09e7c540cabb2eb785ea24247, type: 3}
+      propertyPath: spriteTwoP1
+      value: 
+      objectReference: {fileID: 5333691505068844565, guid: b40d30c9642df564f839ce8c0b42153f, type: 3}
+    - target: {fileID: 7632982861642304800, guid: fc484da09e7c540cabb2eb785ea24247, type: 3}
+      propertyPath: spriteTwoP2
+      value: 
+      objectReference: {fileID: -8778236824269039005, guid: b6bb6ccc1fc315245994813dedd66253, type: 3}
+    - target: {fileID: 7632982861642304800, guid: fc484da09e7c540cabb2eb785ea24247, type: 3}
+      propertyPath: imagePlayerOne
+      value: 
+      objectReference: {fileID: 971628696}
+    - target: {fileID: 7632982861642304800, guid: fc484da09e7c540cabb2eb785ea24247, type: 3}
+      propertyPath: imagePlayerTwo
+      value: 
+      objectReference: {fileID: 202173680}
     - target: {fileID: 7962288970316956359, guid: fc484da09e7c540cabb2eb785ea24247, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3076,6 +3111,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 965811867}
   m_Mesh: {fileID: 3112977340068577888, guid: a0fae87da22cdbedda042b8aea48328f, type: 3}
+--- !u!114 &971628696 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4326532909516666675, guid: fc484da09e7c540cabb2eb785ea24247, type: 3}
+  m_PrefabInstance: {fileID: 395494835}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &1012766749
 GameObject:
   m_ObjectHideFlags: 0
@@ -4206,6 +4252,30 @@ PrefabInstance:
       propertyPath: player2
       value: 
       objectReference: {fileID: 860308424}
+    - target: {fileID: 7632982861642304800, guid: fc484da09e7c540cabb2eb785ea24247, type: 3}
+      propertyPath: spriteOneP1
+      value: 
+      objectReference: {fileID: 1180934658, guid: b40d30c9642df564f839ce8c0b42153f, type: 3}
+    - target: {fileID: 7632982861642304800, guid: fc484da09e7c540cabb2eb785ea24247, type: 3}
+      propertyPath: spriteOneP2
+      value: 
+      objectReference: {fileID: 688587599, guid: b6bb6ccc1fc315245994813dedd66253, type: 3}
+    - target: {fileID: 7632982861642304800, guid: fc484da09e7c540cabb2eb785ea24247, type: 3}
+      propertyPath: spriteTwoP1
+      value: 
+      objectReference: {fileID: 5333691505068844565, guid: b40d30c9642df564f839ce8c0b42153f, type: 3}
+    - target: {fileID: 7632982861642304800, guid: fc484da09e7c540cabb2eb785ea24247, type: 3}
+      propertyPath: spriteTwoP2
+      value: 
+      objectReference: {fileID: -8778236824269039005, guid: b6bb6ccc1fc315245994813dedd66253, type: 3}
+    - target: {fileID: 7632982861642304800, guid: fc484da09e7c540cabb2eb785ea24247, type: 3}
+      propertyPath: imagePlayerOne
+      value: 
+      objectReference: {fileID: 2114072040}
+    - target: {fileID: 7632982861642304800, guid: fc484da09e7c540cabb2eb785ea24247, type: 3}
+      propertyPath: imagePlayerTwo
+      value: 
+      objectReference: {fileID: 1428336617}
     - target: {fileID: 7962288970316956359, guid: fc484da09e7c540cabb2eb785ea24247, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4686,6 +4756,17 @@ MonoBehaviour:
   - {fileID: 487222939939215624, guid: ec7ce2b3e9b3032969b7dde1bac98ae4, type: 3}
   - {fileID: 487222939939215624, guid: 4506422c740dbc188b4177859f658d16, type: 3}
   - {fileID: 487222939939215624, guid: 6a4f8b9933e3b41d78d52f2fc00f0df3, type: 3}
+--- !u!114 &1428336617 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9157346572172150870, guid: fc484da09e7c540cabb2eb785ea24247, type: 3}
+  m_PrefabInstance: {fileID: 1307042305}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &1485617941
 GameObject:
   m_ObjectHideFlags: 0
@@ -6513,6 +6594,17 @@ MonoBehaviour:
   smoothMode: 0
   smoothness: 0
   autoFollow: 1
+--- !u!114 &2114072040 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4326532909516666675, guid: fc484da09e7c540cabb2eb785ea24247, type: 3}
+  m_PrefabInstance: {fileID: 1307042305}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.U2D;
 using UnityEngine.UI;
 
 public class RaceProgressUI : MonoBehaviour
@@ -17,6 +18,16 @@ public class RaceProgressUI : MonoBehaviour
     [SerializeField] private RectTransform player2Icon;
     [SerializeField] private RectTransform progressBar;
 
+    [SerializeField] private Image imagePlayerOne;
+    [SerializeField] private Image imagePlayerTwo;
+    [SerializeField] private Sprite spriteOneP1;
+    [SerializeField] private Sprite spriteTwoP1;
+    [SerializeField] private Sprite spriteOneP2;
+    [SerializeField] private Sprite spriteTwoP2;
+
+    private float player1Progress;
+    private float player2Progress;
+
     private void Update()
     {
         if (player1 == null || player2 == null ||
@@ -29,6 +40,8 @@ public class RaceProgressUI : MonoBehaviour
 
         UpdateIcon(player1Icon, player1Progress);
         UpdateIcon(player2Icon, player2Progress);
+
+        UpdateSprite();
     }
 
     private float GetProgress(Transform player)
@@ -51,5 +64,19 @@ public class RaceProgressUI : MonoBehaviour
         );
 
         icon.anchoredPosition = position;
+    }
+
+    public void UpdateSprite()
+    {
+        if (player1Progress > player2Progress)
+        {
+            imagePlayerOne.sprite = spriteOneP1;
+            imagePlayerTwo.sprite = spriteTwoP2;
+        }
+        else
+        {
+            imagePlayerOne.sprite = spriteTwoP1;
+            imagePlayerTwo.sprite = spriteOneP2;
+        }
     }
 }
