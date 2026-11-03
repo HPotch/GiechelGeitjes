@@ -4629,10 +4629,63 @@ MonoBehaviour:
   bounds: 5
   pushBackDistance: 1.5
   forwardMotionRequired: 2
-  maxSpeed: 15
+  maxSpeed: 13
   speedScale: 1.2
   moveDecay: 1.5
   forwardTimeOut: 0.3
+  speedGainCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -13.62528
+      outSlope: -13.62528
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.025458679
+      value: 0.6531184
+      inSlope: -6.164557
+      outSlope: -6.164557
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.12189422
+      value: 0.29682797
+      inSlope: -2.099174
+      outSlope: -2.099174
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.59366745
+      value: 0.01292022
+      inSlope: -0.09710284
+      outSlope: -0.09710284
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.12860139
+      outWeight: 0.25791147
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0.011195562
+      outSlope: 0.011195562
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.23082772
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  maxSpeedGain: 1.5
+  minSpeedGain: 1
   layerMask:
     serializedVersion: 2
     m_Bits: 0
@@ -4640,10 +4693,10 @@ MonoBehaviour:
   maxTilt: 4
   tiltAcceleration: 10
   brakeRotationRequired: -0.8
-  brakeAmount: 3
+  brakeAmount: 12
   brakeTime: 0.35
   motionSickMode: 1
-  started: 0
+  started: 1
   startPosition: {fileID: 549692816}
 --- !u!4 &2017833665
 Transform:

@@ -277,7 +277,13 @@ public class PlayerMovement : MonoBehaviour
         // Add speed
         if (move)
         {
-            moveAmount += _gm.speedScale;
+            float normalizedSpeed = Mathf.Clamp01(moveAmount / GameManager.Instance.maxSpeed);
+
+            float curveValue = _gm.speedGainCurve.Evaluate(normalizedSpeed);
+
+            float speedGain = Mathf.Lerp(_gm.maxSpeedGain, _gm.minSpeedGain, curveValue);
+
+            moveAmount += _gm.speedScale * speedGain;
             moveAmount = Mathf.Min(moveAmount, GameManager.Instance.maxSpeed);
         }
         

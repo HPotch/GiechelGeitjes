@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
     public float speedScale = 1f;
     public float moveDecay = 0.1f; // In degrees
     public float forwardTimeOut = 0.3f; // In seconds
+    public AnimationCurve speedGainCurve;
+    public float maxSpeedGain, minSpeedGain;
     public LayerMask layerMask;
 
     [Header("Tilt")]
