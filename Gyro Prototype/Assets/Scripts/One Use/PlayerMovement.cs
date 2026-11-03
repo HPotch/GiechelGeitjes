@@ -33,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
     public float moveAmount; // Units/second
     public bool invincible = false;
     public bool braking = false;
+    public bool finished = false;
     
     /// Serialized variables ///
     [Header("References")]
@@ -187,6 +188,11 @@ public class PlayerMovement : MonoBehaviour
             // While wait for other player to reach start, brake, else move
             if (!GameManager.Instance.started && transform.position.z > GameManager.Instance.startPosition.position.z)
                 SpeedDecay(true); 
+            else if (finished)
+            {
+                SpeedDecay(false); // No brake on finished
+                MoveForward(false);
+            }
             else
                 Move();
         }

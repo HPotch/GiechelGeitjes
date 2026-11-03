@@ -19,7 +19,7 @@ public class StartManager : MonoBehaviour
     [SerializeField] private float startWait = 1f;
     [SerializeField] private AnimationCurve numberCurve, goatCurveX, goatCurveY;
     [SerializeField] private float numberHeight = 1000f, goatWidth = 1000f, goatHeight = 500f, goatTime = 2f;
-    [SerializeField] private AudioSettings[] audioOnAwake;
+    [SerializeField] private AudioSettings[] audioOnAwake, afterStartAudio;
     [SerializeField] private AudioSettings startAudio;
 
     private bool _executed = false;
@@ -97,6 +97,8 @@ public class StartManager : MonoBehaviour
         }
 
         GameManager.Instance.started = true;
+        foreach (AudioSettings a in afterStartAudio)
+            AudioManager.Instance.PlayAudioSettings(a);
     }
 
     private void HandleNumbers(RectTransform[] list, float timer, bool reverse = false)

@@ -48,6 +48,7 @@ MonoBehaviour:
   player2: {fileID: 0}
   startZ: 0
   finishZ: 500
+  inset: 50
   player1Icon: {fileID: 1974295264624851923}
   player2Icon: {fileID: 7466273021368883886}
   progressBar: {fileID: 3012492727615270696}
@@ -173,6 +174,7 @@ GameObject:
   - component: {fileID: 1974295264624851923}
   - component: {fileID: 2507186399218753927}
   - component: {fileID: 4326532909516666675}
+  - component: {fileID: 1446573669406551029}
   m_Layer: 5
   m_Name: Player1Icon
   m_TagString: Untagged
@@ -237,6 +239,58 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1446573669406551029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6222188344542034997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5268d61912f4b65a6cbaa595a38e1a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LoopingRotation
+  xCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  yCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  zCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: -0.4016527
+      outSlope: -0.4016527
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.04950442
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.39716858
+      outSlope: -0.39716858
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.050323546
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  randomTime: {x: 1, y: 1}
+  amount: {x: 0, y: 0, z: 10}
+  startRot: {x: 0, y: 0, z: 0}
+  animating: 1
 --- !u!1 &7273826580425217148
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,6 +302,7 @@ GameObject:
   - component: {fileID: 7466273021368883886}
   - component: {fileID: 2902574875233045753}
   - component: {fileID: 9157346572172150870}
+  - component: {fileID: 8741307412806244211}
   m_Layer: 5
   m_Name: Player2Icon
   m_TagString: Untagged
@@ -312,3 +367,55 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8741307412806244211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7273826580425217148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5268d61912f4b65a6cbaa595a38e1a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LoopingRotation
+  xCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  yCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  zCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: -0.4016527
+      outSlope: -0.4016527
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.04950442
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.39716858
+      outSlope: -0.39716858
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.050323546
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  randomTime: {x: 1, y: 1}
+  amount: {x: 0, y: 0, z: 10}
+  startRot: {x: 0, y: 0, z: 0}
+  animating: 1

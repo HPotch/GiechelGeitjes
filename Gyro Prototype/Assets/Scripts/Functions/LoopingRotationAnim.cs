@@ -7,7 +7,7 @@ public class LoopingRotation : MonoBehaviour
     [SerializeField] private Vector3 amount;
 
     public Vector3 startRot;
-    public bool enabled = true;
+    public bool animating = true;
     private float _time = 0f;
     private float _timer = 0f;
 
@@ -19,7 +19,7 @@ public class LoopingRotation : MonoBehaviour
 
     private void Update()
     {
-        if (enabled)
+        if (animating)
             Animate();
         else
             transform.localEulerAngles = Vector3.Lerp(transform.localEulerAngles, startRot, 3 * Time.deltaTime);
@@ -36,8 +36,8 @@ public class LoopingRotation : MonoBehaviour
         float tz = zCurve.Evaluate(i);
 
         transform.localEulerAngles = new Vector3(
-            Mathf.Lerp(startRot.x, startRot.x + amount.x, tx),
-            Mathf.Lerp(startRot.y, startRot.y + amount.y, ty),
-            Mathf.Lerp(startRot.z, startRot.z + amount.z, tz));
+            Mathf.LerpUnclamped(startRot.x, startRot.x + amount.x, tx),
+            Mathf.LerpUnclamped(startRot.y, startRot.y + amount.y, ty),
+            Mathf.LerpUnclamped(startRot.z, startRot.z + amount.z, tz));
     }
 }

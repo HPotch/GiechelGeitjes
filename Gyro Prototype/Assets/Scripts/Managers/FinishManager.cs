@@ -1,5 +1,5 @@
-
 using UnityEngine;
+using AudioSettings = AudioManager.AudioSettings;
 
 public class RaceFinishManager : MonoBehaviour
 {
@@ -14,6 +14,9 @@ public class RaceFinishManager : MonoBehaviour
     [Header("Player 2 Screen")]
     [SerializeField] private GameObject player2WinScreen;
     [SerializeField] private GameObject player2LoseScreen;
+
+    [Header("Settings")]
+    [SerializeField] private AudioSettings finishAudio;
 
     private bool player1Finished;
     private bool player2Finished;
@@ -39,9 +42,13 @@ public class RaceFinishManager : MonoBehaviour
             if (player1Finished) return;
 
             player1Finished = true;
+            player1.GetComponent<PlayerMovement>().finished = true;
 
             if (winner == null)
+            {
+                AudioManager.Instance.PlayAudioSettings(finishAudio);
                 winner = player1;
+            }
         }
 
         // Check whether the collider belongs to Player 2.
@@ -50,9 +57,13 @@ public class RaceFinishManager : MonoBehaviour
             if (player2Finished) return;
 
             player2Finished = true;
+            player2.GetComponent<PlayerMovement>().finished = true;
 
             if (winner == null)
+            {
+                AudioManager.Instance.PlayAudioSettings(finishAudio);
                 winner = player2;
+            }
         }
         else
         {
