@@ -57,7 +57,7 @@ MonoBehaviour:
     volume: 0.5
     pitch: 1
     randomVolume: 0
-    randomPitch: 0
+    randomPitch: 0.2
     startFade: 0
     endFade: 0
     endLoop: 0
