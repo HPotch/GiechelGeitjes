@@ -110,6 +110,5 @@ public class DestroyerGoat : MonoBehaviour
         
         // Set the position relative to the target Player
         transform.position = new Vector3(player.transform.position.x + x, transform.position.y, player.transform.position.z + p);
-        
     }
 }

@@ -1,14 +1,19 @@
+using System;
 using UnityEngine;
-
+using AudioSettings = AudioManager.AudioSettings;
 public class Horn : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private GameObject destroyerGoatPrefab;
+    [SerializeField] private GameObject destroyerGoatPrefab, destroyerGoatAudio;
     [SerializeField] private int goatsOnOneSide = 4;
     [SerializeField] private float spawnDistance = 1f;
+    [SerializeField] private AudioSettings hoovesSound;
+    [SerializeField] private float noSoundDistance = 40f;
     
     private RoadObject _roadObject;
     private Transform _parent;
+    private AudioSource _hoovesSource;
+    private Transform _lastGoat;
 
     private void Awake()
     {
@@ -22,11 +27,18 @@ public class Horn : MonoBehaviour
 
     private void Execute()
     {
+        _hoovesSource = AudioManager.Instance.PlayAudioSettings(hoovesSound).GetComponent<AudioSource>();
         for (int i = 0; i < goatsOnOneSide; i++)
         {
             SpawnGoat((i + 1) * -spawnDistance); // Spawn one left
             SpawnGoat((i + 1) * spawnDistance); // Spawn one right
         }
+
+        DestroyerGoatAudio dga = Instantiate(destroyerGoatAudio, transform.root).GetComponent<DestroyerGoatAudio>();
+        dga.maxVolume = hoovesSound.volume;
+        dga.lastGoat = _lastGoat;
+        dga.noSoundDistance = noSoundDistance;
+        dga.hoovesSource = _hoovesSource;
     }
 
     private void SpawnGoat(float x)
@@ -37,5 +49,6 @@ public class Horn : MonoBehaviour
         DestroyerGoat destroyerGoat = goat.GetComponent<DestroyerGoat>();
         destroyerGoat.player = _roadObject.player.transform;
         destroyerGoat.StartRun();
+        _lastGoat = goat.transform;
     }
 }

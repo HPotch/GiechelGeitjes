@@ -51,6 +51,31 @@ MonoBehaviour:
   type: 2
   moveDirection: {x: 1, y: 0, z: 0}
   destroyBeyond: 21
+  audio:
+    clips:
+    - {fileID: 8300000, guid: 83442692769f01a49a13df4c009ca850, type: 3}
+    volume: 0.5
+    pitch: 1
+    randomVolume: 0
+    randomPitch: 0
+    startFade: 0
+    endFade: 0
+    endLoop: 0
+    pan: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+  audio2:
+    clips: []
+    volume: 1
+    pitch: 1
+    randomVolume: 0
+    randomPitch: 0
+    startFade: 0
+    endFade: 0
+    endLoop: 0
+    pan: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
   onExecute:
     m_PersistentCalls:
       m_Calls: []
@@ -89,8 +114,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Horn
   destroyerGoatPrefab: {fileID: 5659804445466844140, guid: 4f23a295f2ed672d8b0192b9bbd10b17, type: 3}
+  destroyerGoatAudio: {fileID: 4843534640625206124, guid: 396322e37058b0c7eba478cb15874c45, type: 3}
   goatsOnOneSide: 4
   spawnDistance: 1
+  hoovesSound:
+    clips:
+    - {fileID: 8300000, guid: b2a23818b91fee62d8d52f97ee0da245, type: 3}
+    volume: 1
+    pitch: 1
+    randomVolume: 0
+    randomPitch: 0
+    startFade: 0
+    endFade: 0
+    endLoop: 0
+    pan: 0
+    loop: 1
+    mixerGroup: {fileID: 0}
+  noSoundDistance: 10
 --- !u!1 &5706087796350842753
 GameObject:
   m_ObjectHideFlags: 0

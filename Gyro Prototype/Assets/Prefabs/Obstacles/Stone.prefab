@@ -52,6 +52,31 @@ MonoBehaviour:
   type: 1
   moveDirection: {x: 1, y: 0, z: 0}
   destroyBeyond: 21
+  audio:
+    clips:
+    - {fileID: 8300000, guid: 4b599e4cc68016b769b21448e13757a0, type: 3}
+    volume: 1
+    pitch: 1
+    randomVolume: 0
+    randomPitch: 0
+    startFade: 0
+    endFade: 0
+    endLoop: 0
+    pan: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+  audio2:
+    clips: []
+    volume: 1
+    pitch: 1
+    randomVolume: 0
+    randomPitch: 0
+    startFade: 0
+    endFade: 0
+    endLoop: 0
+    pan: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
   onExecute:
     m_PersistentCalls:
       m_Calls: []

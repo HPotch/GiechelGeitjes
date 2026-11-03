@@ -10,6 +10,7 @@ public class RaceProgressUI : MonoBehaviour
     [Header("Race Settings")]
     [SerializeField] private float startZ = 0f;
     [SerializeField] private float finishZ = 500f;
+    [SerializeField] private float inset = 50f;
 
     [Header("UI Icons")]
     [SerializeField] private RectTransform player1Icon;
@@ -40,7 +41,7 @@ public class RaceProgressUI : MonoBehaviour
 
     private void UpdateIcon(RectTransform icon, float progress)
     {
-        float halfWidth = progressBar.rect.width / 2f;
+        float halfWidth = (progressBar.rect.width * progressBar.localScale.x - inset) / 2f;
 
         Vector2 position = icon.anchoredPosition;
         position.x = Mathf.Lerp(

@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using AudioSettings = AudioManager.AudioSettings;
@@ -16,19 +14,28 @@ public class StartManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    [SerializeField] private Image[] images;
+    [SerializeField] private RectTransform[] ones, twos, threes, goats;
     
     [SerializeField] private float startWait = 1f;
-    [SerializeField] private Sprite[] sprites; // Should contain "3", "2", "1", "GO" sprites
-    [SerializeField] private AnimationCurve sizeCurve;
-    [SerializeField] private AudioSettings audioSettings;
+    [SerializeField] private AnimationCurve numberCurve, goatCurveX, goatCurveY;
+    [SerializeField] private float numberHeight = 1000f, goatWidth = 1000f, goatHeight = 500f, goatTime = 2f;
+    [SerializeField] private AudioSettings[] audioOnAwake;
+    [SerializeField] private AudioSettings startAudio;
 
     private bool _executed = false;
+    private float _startY, _goatStartY;
     
     private void Start()
     {
-        foreach (Image img in images)
-            img.transform.localScale = Vector3.zero;
+        foreach (AudioSettings a in audioOnAwake)
+            AudioManager.Instance.PlayAudioSettings(a);
+        
+        _startY = ones[0].anchoredPosition.y;
+        _goatStartY = goats[0].anchoredPosition.y;
+        foreach (RectTransform rt in ones) rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, _startY - numberHeight);
+        foreach (RectTransform rt in twos) rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, _startY - numberHeight);
+        foreach (RectTransform rt in threes) rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, _startY - numberHeight);
+        foreach (RectTransform rt in goats) rt.anchoredPosition = new Vector2(goatWidth, _goatStartY);
     }
     
     public void StartGame()
@@ -41,31 +48,65 @@ public class StartManager : MonoBehaviour
     private IEnumerator StartRoutine()
     {
         yield return new WaitForSeconds(startWait);
+        AudioManager.Instance.PlayAudioSettings(startAudio);
         
+        // Three
         float timer = 0f;
-        for (int i = 0; i < 4; i++)
+        while (timer < 1f)
         {
-            foreach (var img in images)
-                img.sprite = sprites[i];
+            timer += Time.deltaTime;
+            HandleNumbers(threes, timer);
+            yield return null;
+        }
 
-            AudioManager.Instance.PlayAudioSettings(audioSettings);
+        // Two
+        timer = 0f;
+        while (timer < 1f)
+        {
+            timer += Time.deltaTime;
+            HandleNumbers(twos, timer);
+            yield return null;
+        }
+        
+        // One
+        timer = 0f;
+        while (timer < 1f)
+        {
+            timer += Time.deltaTime;
+            HandleNumbers(ones, timer);
+            yield return null;
+        }
+        
+        // GOAT!
+        timer = 0f;
+        while (timer < goatTime)
+        {
+            timer += Time.deltaTime;
+            float tx = goatCurveX.Evaluate(timer / goatTime);
+            float ty = goatCurveY.Evaluate(timer / goatTime);
+            foreach (RectTransform rt in goats)
+                rt.anchoredPosition = new Vector2(
+                    Mathf.Lerp(goatWidth, -goatWidth, tx),
+                    Mathf.Lerp(_goatStartY, _goatStartY + goatHeight, ty));
             
-            while (timer < 1f)
-            {
-                timer += Time.deltaTime;
-                float t = sizeCurve.Evaluate(timer / 1f);
-                foreach (var img in images)
-                    img.transform.localScale = Vector3.one * Mathf.Lerp(0f, 1f, t);
-
-                yield return null;
-            }
+            HandleNumbers(ones, timer, true);
+            HandleNumbers(twos, timer, true);
+            HandleNumbers(threes, timer, true);
             
-            foreach (var img in images)
-                img.transform.localScale = Vector3.zero;
-
-            timer = 0f;
+            yield return null;
         }
 
         GameManager.Instance.started = true;
+    }
+
+    private void HandleNumbers(RectTransform[] list, float timer, bool reverse = false)
+    {
+        float t = numberCurve.Evaluate(timer / 1f);
+        foreach (RectTransform rt in list)
+            rt.anchoredPosition = new Vector2(
+                rt.anchoredPosition.x,
+                reverse 
+                ? Mathf.Lerp(_startY, _startY - numberHeight, t)
+                : Mathf.Lerp(_startY - numberHeight, _startY, t));
     }
 }

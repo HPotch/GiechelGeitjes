@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6556593621032007328}
   - component: {fileID: 8969527694518503798}
   - component: {fileID: 80214890137738557}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: DestroyerGoat
   m_TagString: Destroyer
   m_Icon: {fileID: 0}
@@ -124,6 +124,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  maxHitPoints: 3
 --- !u!65 &8969527694518503798
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -182,7 +183,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4582320222853352402}
   - component: {fileID: 5846807482493582073}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}

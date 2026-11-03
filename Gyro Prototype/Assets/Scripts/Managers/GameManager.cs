@@ -30,12 +30,12 @@ public class GameManager : MonoBehaviour
     public float maxTilt = 0.2f;
     public float tiltAcceleration = 10f;
     
-    [Header("Break")]
-    public float breakRotationRequired = -0.8f;
-    [Tooltip("Break amount is compared to regular speed decay")]
-    public float breakAmount = 3f;
-    [Tooltip("The time the player should break before actually executing")] // Helps prevent accidental breaks or inaccuracies
-    public float breakTime = 0.35f; // In seconds
+    [Header("Brake")]
+    public float brakeRotationRequired = -0.8f;
+    [Tooltip("Brake amount is compared to regular speed decay")]
+    public float brakeAmount = 3f;
+    [Tooltip("The time the player should brake before actually executing")] // Helps prevent accidental brakes or inaccuracies
+    public float brakeTime = 0.35f; // In seconds
     
     public enum MotionSickMode { none, aLittle, aLot }
     [Header("MotionSick")]

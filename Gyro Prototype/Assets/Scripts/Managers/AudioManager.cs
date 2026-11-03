@@ -71,9 +71,9 @@ public class AudioManager : MonoBehaviour
     
     public AudioObject PlayAudioSettings(AudioSettings a)
     {
-        if (a.clips.Length == 0)
+        if (a.clips ==  null || a.clips.Length == 0)
         {
-            Debug.LogError($"No clips passed in audioSettings {a}");
+            Debug.LogWarning($"No clips passed in audioSettings {a}, aborting.");
             return null;
         }
         return PlayAudio(a.clips[Random.Range(0, a.clips.Length)], a.volume + Random.Range(-a.randomVolume, a.randomVolume), a.pitch + Random.Range(-a.randomPitch, a.randomPitch), a.startFade, a.endFade, a.endLoop, a.pan, a.loop, a.mixerGroup);
@@ -93,9 +93,9 @@ public class AudioManager : MonoBehaviour
         return audioObjects[clip];
     }
     
-    public void StopAudioObject(AudioObject audioObject)
+    public void StopAudioObject(AudioObject audioObject, bool immediately = false)
     {
-        audioObject.Stop();
+        audioObject.Stop(immediately);
     }
     
     public void StopFirstAudio(AudioClip clip)
