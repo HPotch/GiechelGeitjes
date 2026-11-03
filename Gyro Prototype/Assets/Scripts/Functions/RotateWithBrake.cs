@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class RotateWithBreak : MonoBehaviour
+public class RotateWithBrake : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private PlayerMovement player;
@@ -21,7 +21,7 @@ public class RotateWithBreak : MonoBehaviour
 
     private void Update()
     {
-        _t = Mathf.Lerp(_t, player.breaking ? 1f : 0f, Time.deltaTime * smoothness);
+        _t = Mathf.Lerp(_t, player.braking ? 1f : 0f, Time.deltaTime * smoothness);
         transform.localEulerAngles = Vector3.Lerp(_startRot, breakRotation, _t);
     }
 }

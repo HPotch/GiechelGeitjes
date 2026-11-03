@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using AudioSettings = AudioManager.AudioSettings;
 
 public class RoadObject : MonoBehaviour
 {
@@ -10,8 +11,10 @@ public class RoadObject : MonoBehaviour
 
     [SerializeField] private Type type = Type.LowObstacle;
     [SerializeField] [Tooltip("Units per second")] private Vector3 moveDirection = new Vector3(1f, 0, 0);
+    [SerializeField] private bool dontDestroy = false;
 
     [SerializeField] private float destroyBeyond = 2f;
+    [SerializeField] private AudioSettings audio, audio2;
 
     public UnityEvent onExecute;
     public PlayerMovement player;
@@ -25,7 +28,7 @@ public class RoadObject : MonoBehaviour
     private void Update()
     {
         if (transform.position.z < GameManager.Instance.Loser().position.z - destroyBeyond)
-            Destroy(gameObject);
+            if (!dontDestroy) Destroy(gameObject);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -47,6 +50,9 @@ public class RoadObject : MonoBehaviour
         // Player
         player = collider.GetComponent<PlayerMovement>();
         if (!player) return;
+
+        AudioManager.Instance.PlayAudioSettings(audio);
+        AudioManager.Instance.PlayAudioSettings(audio2);
 
         // Account for invincibility
         if (player.invincible && type != Type.Item)
@@ -74,7 +80,7 @@ public class RoadObject : MonoBehaviour
     private void CollideItem()
     {
         onExecute.Invoke();
-        Destroy(gameObject);
+        if (!dontDestroy) Destroy(gameObject);
     }
 
     private void FallOver(GameObject destroyer = null)

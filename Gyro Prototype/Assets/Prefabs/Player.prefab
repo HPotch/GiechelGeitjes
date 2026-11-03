@@ -271,10 +271,89 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveAmount: 0
   invincible: 0
-  breaking: 0
+  braking: 0
   jumpTransform: {fileID: 0}
   crashSender: {fileID: 8250120664768661636}
   player: 0
+  jumpAudio:
+    clips:
+    - {fileID: 8300000, guid: cd39dd79cecea442288e58eb65a4cc6e, type: 3}
+    volume: 1
+    pitch: 1
+    randomVolume: 0
+    randomPitch: 0
+    startFade: 0
+    endFade: 0
+    endLoop: 0
+    pan: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+  landAudio:
+    clips:
+    - {fileID: 8300000, guid: 02664fd9ef4daaee194feff728f94ebf, type: 3}
+    volume: 1
+    pitch: 1
+    randomVolume: 0
+    randomPitch: 0
+    startFade: 0
+    endFade: 0
+    endLoop: 0
+    pan: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+  sprintStartAudio:
+    clips:
+    - {fileID: 8300000, guid: dd6477bb7fa006fb5abd009f27269a5c, type: 3}
+    volume: 1
+    pitch: 1
+    randomVolume: 0
+    randomPitch: 0
+    startFade: 0
+    endFade: 0
+    endLoop: 0
+    pan: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+  sprintAudio:
+    clips:
+    - {fileID: 8300000, guid: 150b7d4d72b2e6c7e85b3f27ac1b5317, type: 3}
+    volume: 0.5
+    pitch: 1
+    randomVolume: 0
+    randomPitch: 0
+    startFade: 0
+    endFade: 0
+    endLoop: 0
+    pan: 0
+    loop: 1
+    mixerGroup: {fileID: 0}
+  moveAudio:
+    clips:
+    - {fileID: 8300000, guid: 1d309b2828958e1f2b5cc7c7024a03dd, type: 3}
+    volume: 1
+    pitch: 1
+    randomVolume: 0
+    randomPitch: 0
+    startFade: 0
+    endFade: 0
+    endLoop: 0
+    pan: 0
+    loop: 1
+    mixerGroup: {fileID: 0}
+  brakeAudio:
+    clips:
+    - {fileID: 8300000, guid: 77453861c70729b36a2320f15d76bf8d, type: 3}
+    volume: 0.5
+    pitch: 1
+    randomVolume: 0
+    randomPitch: 0
+    startFade: 0
+    endFade: 0
+    endLoop: 0
+    pan: 0
+    loop: 1
+    mixerGroup: {fileID: 0}
+  brakeAudioSmoothness: 10
   afterMove:
     m_PersistentCalls:
       m_Calls:
@@ -351,7 +430,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -368,8 +447,8 @@ Rigidbody:
   m_GameObject: {fileID: 3309351644921129695}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_LinearDamping: 1
+  m_AngularDamping: 1
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -378,13 +457,13 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 126
+  m_Constraints: 124
   m_CollisionDetection: 0
 --- !u!1 &3749893531941091929
 GameObject:

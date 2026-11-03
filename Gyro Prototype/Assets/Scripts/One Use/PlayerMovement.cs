@@ -18,20 +18,21 @@
 // Public variables
 // - moveAmount - The amount the player is currently moving forward in units/second
 // - invincible - Bool that can be set and read to make the player invincible (isn't used in this script, though!)
-// - breaking - Bool that is set to whether the player is breaking or not
+// - braking - Bool that is set to whether the player is braking or not
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using AudioSettings = AudioManager.AudioSettings;
 
 public class PlayerMovement : MonoBehaviour
 {
     /// Public variables ///
     public float moveAmount; // Units/second
     public bool invincible = false;
-    public bool breaking = false;
+    public bool braking = false;
     
     /// Serialized variables ///
     [Header("References")]
@@ -41,12 +42,9 @@ public class PlayerMovement : MonoBehaviour
     [Header("Settings")]
     [SerializeField] [Range(0, 1)] private int player = 1; // 0 = left; 1 = right
 
-    /// speedCurve ///
-    [SerializeField] private AnimationCurve speedGainCurve;
-
-    [SerializeField] private float _minSpeedGain = 0.1f;
-    [SerializeField] private float _maxSpeedGain = 2f;
-
+    [SerializeField] private AudioSettings jumpAudio, landAudio, sprintStartAudio, sprintAudio, moveAudio, brakeAudio;
+    [SerializeField] private float brakeAudioSmoothness = 10f;
+    
     /// Events ///
     public UnityEvent afterMove; // Called after moving is done
 
@@ -54,8 +52,9 @@ public class PlayerMovement : MonoBehaviour
     private float _tiltVelocity; // Current steering, smoothed based on GameManager.tiltAcceleration
     private float _disableTime; // The current time left until enabled. _disableTime < 0f means movement is enabled
     private float _forwardTimeOut; // Forward motion must use some timeout to work around multiple triggers from one flick
-    private float _breakTime = 0f;
+    private float _brakeTime = 0f;
     private GameManager _gm;
+    private AudioSource _moveSource, _brakeSource;
     
     // Sprint
     private float _sprintMultiplier = 1f; // The current speed multiplier, used by sprint
@@ -70,6 +69,10 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         _gm = GameManager.Instance;
+        _moveSource = AudioManager.Instance.PlayAudioSettings(moveAudio)?.GetComponent<AudioSource>();
+        _brakeSource = AudioManager.Instance.PlayAudioSettings(brakeAudio)?.GetComponent<AudioSource>();
+        if (_moveSource) _moveSource.volume = 0f;
+        if (_brakeSource) _brakeSource.volume = 0f;
     }
     
     
@@ -88,6 +91,7 @@ public class PlayerMovement : MonoBehaviour
     public void Sprint(float time, float smoothing, float multiplier, float fovChange)
     {
         StartCoroutine(SprintRoutine(time, smoothing, multiplier, fovChange));
+        AudioManager.Instance.PlayAudioSettings(sprintStartAudio);
     }
     private IEnumerator SprintRoutine(float time, float smoothing, float multiplier, float fovChange)
     {
@@ -95,6 +99,8 @@ public class PlayerMovement : MonoBehaviour
         float timer = 0f;
         _sprintMultiplier = 1f;
 
+        // Start audio
+        AudioSource sprintSource = AudioManager.Instance.PlayAudioSettings(sprintAudio).GetComponent<AudioSource>();
         // Speed up until time is over
         while (timer < time)
         {
@@ -102,6 +108,8 @@ public class PlayerMovement : MonoBehaviour
             _sprintMultiplier += smoothing * Time.deltaTime;
             _sprintMultiplier = Mathf.Min(_sprintMultiplier, multiplier);
             _cam.additionalFov = Mathf.Lerp(_cam.additionalFov, fovChange, Time.deltaTime * 5f);
+            
+            sprintSource.volume = ((_sprintMultiplier - 1f) / (multiplier - 1f)) * sprintAudio.volume; // Set volume
             yield return null;
         }
 
@@ -110,12 +118,15 @@ public class PlayerMovement : MonoBehaviour
         {
             _sprintMultiplier -= smoothing * Time.deltaTime;
             _cam.additionalFov = Mathf.Lerp(_cam.additionalFov, 0f , Time.deltaTime * 5f); 
+            
+            sprintSource.volume = ((_sprintMultiplier - 1f) / (multiplier - 1f)) * sprintAudio.volume; // Set volume
             yield return null;
         }
         
         // Exit cleanly
         _sprintMultiplier = 1f;
         _cam.additionalFov = 0f;
+        AudioManager.Instance.StopAudioObject(sprintSource.GetComponent<AudioObject>(), true); // Delete audio
     }
 
     /// <summary>
@@ -129,6 +140,7 @@ public class PlayerMovement : MonoBehaviour
     public void SuperJump(float time, float distance, float height, AnimationCurve distanceCurve, AnimationCurve heightCurve)
     {
         StartCoroutine(SuperJumpRoutine(time, distance, height, distanceCurve, heightCurve));
+        AudioManager.Instance.PlayAudioSettings(jumpAudio);
     }
     private IEnumerator SuperJumpRoutine(float time, float distance, float height, AnimationCurve distanceCurve, AnimationCurve heightCurve)
     {
@@ -159,6 +171,7 @@ public class PlayerMovement : MonoBehaviour
         moveAmount = (transform.position.z - prevZPos) / Time.deltaTime; // Set the right velocity
         _disableTime = 0f;
         transform.position = new Vector3(start.x, start.y, transform.position.z); // Keep z, the player has traveled, dude
+        AudioManager.Instance.PlayAudioSettings(landAudio);
 
         yield return new WaitForSeconds(1f); // 1 second extra invincibility for when you land right before an obstacle
         invincible = false; // Hit that viking! Hit! Him!
@@ -167,11 +180,19 @@ public class PlayerMovement : MonoBehaviour
     
     private void Update()
     {
-        if (player == 0) print(moveAmount);
         _disableTime -= Time.deltaTime;
 
-        if (_disableTime <= 0f) Move();
+        if (_disableTime <= 0f)
+        {
+            // While wait for other player to reach start, brake, else move
+            if (!GameManager.Instance.started && transform.position.z > GameManager.Instance.startPosition.position.z)
+                SpeedDecay(true); 
+            else
+                Move();
+        }
         else moveAmount = 0f; // Remove all built up velocity
+
+        UpdateMoveVolume();
     }
 
     private void Move()
@@ -182,7 +203,7 @@ public class PlayerMovement : MonoBehaviour
         List<float> upd2Values = udpr.func2Values[player].values;
         
         Steer(GetSteeringInput(upd1Values[0])); // Steer
-        SpeedDecay(GetBreakInput(upd2Values[1])); // Speed decay / break
+        SpeedDecay(GetBrakeInput(upd2Values[1])); // Speed decay / brake
         MoveForward(GetMoveInput(upd2Values[1])); // Forward motion
         
         afterMove.Invoke();
@@ -246,18 +267,23 @@ public class PlayerMovement : MonoBehaviour
     private void MoveForward(bool move)
     {
         // Return if colliding with an object
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), 0.1f, _gm.layerMask)) return;
+        if (Physics.Raycast(
+            transform.position,
+            transform.TransformDirection(Vector3.forward),
+            0.1f,
+            _gm.layerMask)
+            ) return;
         
         // Add speed
         if (move)
         {
             float normalizedSpeed = Mathf.Clamp01(moveAmount / GameManager.Instance.maxSpeed);
 
-            float curveValue = speedGainCurve.Evaluate(normalizedSpeed);
+            float curveValue = _gm.speedGainCurve.Evaluate(normalizedSpeed);
 
-            float speedGain = Mathf.Lerp(_maxSpeedGain, _minSpeedGain, curveValue);
+            float speedGain = Mathf.Lerp(_gm.maxSpeedGain, _gm.minSpeedGain, curveValue);
 
-            moveAmount += _gm.speedScale;
+            moveAmount += _gm.speedScale * speedGain;
             moveAmount = Mathf.Min(moveAmount, GameManager.Instance.maxSpeed);
         }
         
@@ -265,10 +291,10 @@ public class PlayerMovement : MonoBehaviour
         transform.position += transform.forward * (moveAmount * Time.deltaTime * _sprintMultiplier);
     }
 
-    private bool GetBreakInput(float udpValue)
+    private bool GetBrakeInput(float udpValue)
     {
         // UDP input
-        bool value = udpValue < _gm.breakRotationRequired;
+        bool value = udpValue < _gm.brakeRotationRequired;
         
         // Keyboard input
         if (player == 0)
@@ -276,21 +302,35 @@ public class PlayerMovement : MonoBehaviour
         else
             value = Keyboard.current.leftShiftKey.isPressed || value;
 
-        if (!value) _breakTime = 0f;
-        else _breakTime += Time.deltaTime;
-        value = _breakTime > _gm.breakTime;
+        if (!value) _brakeTime = 0f;
+        else _brakeTime += Time.deltaTime;
+        value = _brakeTime > _gm.brakeTime;
+
+        if (_brakeSource)
+            _brakeSource.volume = Mathf.Lerp(
+                _brakeSource.volume,
+                value ? brakeAudio.volume : 0f, 
+                Time.deltaTime * brakeAudioSmoothness);
             
-        breaking = value;
+        
+        braking = value;
         return value;
     }
 
-    private void SpeedDecay(bool useBreak = false)
+    private void SpeedDecay(bool usebrake = false)
     {
-        if (useBreak)
-            moveAmount -= _gm.moveDecay * _gm.breakAmount * Time.deltaTime;
+        if (usebrake)
+            moveAmount -= _gm.moveDecay * _gm.brakeAmount * Time.deltaTime;
         else
             moveAmount -= _gm.moveDecay * Time.deltaTime;
         
         moveAmount = Mathf.Max(moveAmount, 0f);
+    }
+
+    private void UpdateMoveVolume()
+    {
+        if (!_moveSource) return;
+        float multiplier = Mathf.Clamp01(moveAmount / _gm.maxSpeed);
+        _moveSource.volume = moveAudio.volume * multiplier;
     }
 }

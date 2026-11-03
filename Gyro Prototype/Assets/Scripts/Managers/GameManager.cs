@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
     public float speedScale = 1f;
     public float moveDecay = 0.1f; // In degrees
     public float forwardTimeOut = 0.3f; // In seconds
+    public AnimationCurve speedGainCurve;
+    public float maxSpeedGain, minSpeedGain;
     public LayerMask layerMask;
 
     [Header("Tilt")]
@@ -30,17 +32,21 @@ public class GameManager : MonoBehaviour
     public float maxTilt = 0.2f;
     public float tiltAcceleration = 10f;
     
-    [Header("Break")]
-    public float breakRotationRequired = -0.8f;
-    [Tooltip("Break amount is compared to regular speed decay")]
-    public float breakAmount = 3f;
-    [Tooltip("The time the player should break before actually executing")] // Helps prevent accidental breaks or inaccuracies
-    public float breakTime = 0.35f; // In seconds
+    [Header("Brake")]
+    public float brakeRotationRequired = -0.8f;
+    [Tooltip("Brake amount is compared to regular speed decay")]
+    public float brakeAmount = 3f;
+    [Tooltip("The time the player should brake before actually executing")] // Helps prevent accidental brakes or inaccuracies
+    public float brakeTime = 0.35f; // In seconds
     
     public enum MotionSickMode { none, aLittle, aLot }
     [Header("MotionSick")]
     [Tooltip("'None' might introduce problems for people who don't regularly experience motion sickness too!")]
     public MotionSickMode motionSickMode = MotionSickMode.none;
+
+    [Header("Start")]
+    public bool started = false;
+    public Transform startPosition;
 
     private void Start()
     {
@@ -50,15 +56,18 @@ public class GameManager : MonoBehaviour
             Display.displays[2].Activate();
     }
     
-    /*private void Update()
+    private void Update()
     {
-        Debug.Log(
+        /*Debug.Log(
             $"First Player: {(firstPlayer ? firstPlayer.name : "NULL")} " +
             $"Z: {(firstPlayer ? firstPlayer.transform.position.z : 0f)}, " +
             $"Second Player: {(secondPlayer ? secondPlayer.name : "NULL")} " +
             $"Z: {(secondPlayer ? secondPlayer.transform.position.z : 0f)}"
-        );
-    }*/
+        );*/
+
+        if (firstPlayer.transform.position.z >= startPosition.position.z &&
+            secondPlayer.transform.position.z >= startPosition.position.z) StartManager.Instance.StartGame();
+    }
 
     public Transform Leader()
     {
