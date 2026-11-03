@@ -41,6 +41,12 @@ public class PlayerMovement : MonoBehaviour
     [Header("Settings")]
     [SerializeField] [Range(0, 1)] private int player = 1; // 0 = left; 1 = right
 
+    /// speedCurve ///
+    [SerializeField] private AnimationCurve speedGainCurve;
+
+    [SerializeField] private float _minSpeedGain = 0.1f;
+    [SerializeField] private float _maxSpeedGain = 2f;
+
     /// Events ///
     public UnityEvent afterMove; // Called after moving is done
 
@@ -240,16 +246,17 @@ public class PlayerMovement : MonoBehaviour
     private void MoveForward(bool move)
     {
         // Return if colliding with an object
-        if (Physics.Raycast(
-            transform.position,
-            transform.TransformDirection(Vector3.forward),
-            0.1f,
-            _gm.layerMask)
-            ) return;
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), 0.1f, _gm.layerMask)) return;
         
         // Add speed
         if (move)
         {
+            float normalizedSpeed = Mathf.Clamp01(moveAmount / GameManager.Instance.maxSpeed);
+
+            float curveValue = speedGainCurve.Evaluate(normalizedSpeed);
+
+            float speedGain = Mathf.Lerp(_maxSpeedGain, _minSpeedGain, curveValue);
+
             moveAmount += _gm.speedScale;
             moveAmount = Mathf.Min(moveAmount, GameManager.Instance.maxSpeed);
         }
