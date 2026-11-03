@@ -32,6 +32,7 @@ public class RaceFinishManager : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Transform hit = other.transform;
+        print(hit.name);
 
         // Check whether the collider belongs to Player 1.
         if (hit == player1 || hit.IsChildOf(player1))

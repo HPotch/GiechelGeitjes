@@ -655,7 +655,7 @@ Transform:
   m_GameObject: {fileID: 227097329}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.70710605, z: -0, w: 0.7071075}
-  m_LocalPosition: {x: 15.09, y: 1.17, z: 500}
+  m_LocalPosition: {x: 15.09, y: 1.17, z: 30}
   m_LocalScale: {x: 1.84, y: 1.2473077, z: 1.2473077}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -718,6 +718,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RoadObject
   type: 0
   moveDirection: {x: 1, y: 0, z: 0}
+  dontDestroy: 1
   destroyBeyond: 2
   audio:
     clips: []
@@ -1741,59 +1742,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 901548552}
   m_CullTransparentMesh: 1
---- !u!1 &907023911
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 907023912}
-  - component: {fileID: 907023913}
-  m_Layer: 0
-  m_Name: FinishLine
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &907023912
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 907023911}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1485617942}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &907023913
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 907023911}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 50, y: 50, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &907513536
 GameObject:
   m_ObjectHideFlags: 0
@@ -2470,6 +2418,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RoadObject
   type: 0
   moveDirection: {x: 1, y: 0, z: 0}
+  dontDestroy: 0
   destroyBeyond: 2
   audio:
     clips: []
@@ -3758,6 +3707,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1485617942}
   - component: {fileID: 1485617943}
+  - component: {fileID: 1485617944}
   m_Layer: 0
   m_Name: FinishManager
   m_TagString: Untagged
@@ -3774,11 +3724,10 @@ Transform:
   m_GameObject: {fileID: 1485617941}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.70710605, z: -0, w: 0.7071075}
-  m_LocalPosition: {x: 0.61576253, y: -0.93802035, z: 2.8862147}
+  m_LocalPosition: {x: -0.12, y: -0.93802035, z: 2.89}
   m_LocalScale: {x: 0.801727, y: 0.8017268, z: 0.5434783}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 907023912}
+  m_Children: []
   m_Father: {fileID: 227097330}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1485617943
@@ -3793,12 +3742,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4c15f8489334fa4a9cd6012691564a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RaceFinishManager
-  player1: {fileID: 0}
-  player2: {fileID: 0}
+  player1: {fileID: 944201387}
+  player2: {fileID: 860308424}
   player1WinScreen: {fileID: 912425830}
   player1LoseScreen: {fileID: 1790122745}
   player2WinScreen: {fileID: 971036714}
   player2LoseScreen: {fileID: 1333371556}
+--- !u!65 &1485617944
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1485617941}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 50, y: 50, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1508104549
 GameObject:
   m_ObjectHideFlags: 0
@@ -4696,7 +4666,7 @@ MonoBehaviour:
   brakeAmount: 12
   brakeTime: 0.35
   motionSickMode: 1
-  started: 1
+  started: 0
   startPosition: {fileID: 549692816}
 --- !u!4 &2017833665
 Transform:
