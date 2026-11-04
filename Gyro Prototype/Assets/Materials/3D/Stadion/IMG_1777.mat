@@ -26,6 +26,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _AOTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 2800000, guid: 373f6f75c9ec3031a96845b81cd70749, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -52,6 +56,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: 373f6f75c9ec3031a96845b81cd70749, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetalTexture:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -92,6 +100,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AOIntensity: 0
     - _AddPrecomputedVelocity: 0
     - _Alpha: 1
     - _AlphaClip: 1
@@ -117,6 +126,7 @@ Material:
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _InvertNormal: 0
+    - _MetalIntensity: 0
     - _Metallic: 0
     - _Mode: 0
     - _NoiseMultiplier: 0
@@ -143,6 +153,7 @@ Material:
     - _ZTest: 4
     - _ZWrite: 1
     - _ZWriteControl: 0
+    - _useAO: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}

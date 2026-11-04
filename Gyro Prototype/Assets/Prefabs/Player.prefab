@@ -272,6 +272,7 @@ MonoBehaviour:
   moveAmount: 0
   invincible: 0
   braking: 0
+  finished: 0
   jumpTransform: {fileID: 0}
   crashSender: {fileID: 8250120664768661636}
   player: 0
@@ -1577,7 +1578,7 @@ MonoBehaviour:
     y: 0
     z: 1
   smoothMode: 1
-  smoothness: 20
+  smoothness: 45
   autoFollow: 0
 --- !u!1 &8214913868067561070
 GameObject:
