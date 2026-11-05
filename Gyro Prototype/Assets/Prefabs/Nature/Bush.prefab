@@ -190,6 +190,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7995131959349141498}
   - component: {fileID: -9196333138719524368}
+  - component: {fileID: 5316149850444349262}
   m_Layer: 0
   m_Name: Bush
   m_TagString: Untagged
@@ -227,3 +228,47 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RandomScale
   scale: {x: 0.5, y: 2}
+--- !u!114 &5316149850444349262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4261438811447223521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9722f3e6b163e4f6b150b4f5bf46f69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RoadObject
+  type: 1
+  moveDirection: {x: 1, y: 0, z: 0}
+  dontDestroy: 0
+  destroyBeyond: 2
+  audio:
+    clips: []
+    volume: 1
+    pitch: 1
+    randomVolume: 0
+    randomPitch: 0
+    startFade: 0
+    endFade: 0
+    endLoop: 0
+    pan: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+  audio2:
+    clips: []
+    volume: 1
+    pitch: 1
+    randomVolume: 0
+    randomPitch: 0
+    startFade: 0
+    endFade: 0
+    endLoop: 0
+    pan: 0
+    loop: 0
+    mixerGroup: {fileID: 0}
+  onExecute:
+    m_PersistentCalls:
+      m_Calls: []
+  player: {fileID: 0}
